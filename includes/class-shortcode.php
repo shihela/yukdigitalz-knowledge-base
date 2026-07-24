@@ -66,8 +66,8 @@ class Shortcode {
 				</div>
 			</header>
 
-			<!-- Categories Grid -->
-			<main class="yukdigitalz-kb-categories-grid">
+			<!-- Categories & Product Sections -->
+			<main class="yukdigitalz-kb-portal-container">
 				<?php
 				$taxonomy = 'yukdigitalz_kb_cat';
 				$args = array(
@@ -97,37 +97,35 @@ class Shortcode {
 						if ( ! is_wp_error( $sub_categories ) ) {
 							$sub_categories = \YukdigitalzKnowledgeBase\Templates::sort_categories( $sub_categories );
 						}
+
+						$cat_doc_count = \YukdigitalzKnowledgeBase\Templates::get_category_doc_count( $category );
 						?>
-						<div class="yukdigitalz-kb-category-card">
-							<div class="yukdigitalz-kb-category-header">
-								<span class="yukdigitalz-kb-category-icon" aria-hidden="true">
+						<section class="yukdigitalz-kb-portal-section">
+							<header class="yukdigitalz-kb-portal-section-header">
+								<span class="yukdigitalz-kb-portal-section-icon" aria-hidden="true">
 									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
 								</span>
-								<div class="yukdigitalz-kb-category-info">
-									<h2 class="yukdigitalz-kb-category-title">
+								<div class="yukdigitalz-kb-portal-section-info">
+									<h2 class="yukdigitalz-kb-portal-section-title">
 										<a href="<?php echo esc_url( get_term_link( $category ) ); ?>">
 											<?php echo esc_html( $category->name ); ?>
 										</a>
 									</h2>
-									<span class="yukdigitalz-kb-category-count">
+									<span class="yukdigitalz-kb-portal-section-count">
 										<?php
-										$cat_doc_count = \YukdigitalzKnowledgeBase\Templates::get_category_doc_count( $category );
 										/* translators: %s: number of articles */
 										printf( esc_html( _n( '%s Article', '%s Articles', $cat_doc_count, 'yukdigitalz-knowledge-base' ) ), esc_html( $cat_doc_count ) );
 										?>
 									</span>
 								</div>
-							</div>
-							
-							<?php if ( ! empty( $category->description ) ) : ?>
-								<p class="yukdigitalz-kb-category-desc"><?php echo esc_html( wp_trim_words( $category->description, 15 ) ); ?></p>
-							<?php endif; ?>
+							</header>
 
-							<div class="yukdigitalz-kb-category-docs-wrapper">
+							<div class="yukdigitalz-kb-subcat-grid">
 								<?php
 								if ( ! empty( $sub_categories ) && ! is_wp_error( $sub_categories ) ) {
-									// Display Subcategories (e.g. Showcase Portfolio Addon) inside Parent Card
+									// Display Subcategories as individual product cards in a responsive grid
 									foreach ( $sub_categories as $sub_cat ) {
+										$sub_count = \YukdigitalzKnowledgeBase\Templates::get_category_doc_count( $sub_cat );
 										$sub_doc_query = new \WP_Query( array(
 											'post_type'      => 'yukdigitalz_kb_doc',
 											'post_status'    => 'publish',
@@ -142,12 +140,30 @@ class Shortcode {
 											),
 										) );
 										?>
-										<div class="yukdigitalz-kb-portal-subcat-section">
-											<h3 class="yukdigitalz-kb-portal-subcat-title">
-												<a href="<?php echo esc_url( get_term_link( $sub_cat ) ); ?>">
-													<?php echo esc_html( $sub_cat->name ); ?>
-												</a>
-											</h3>
+										<div class="yukdigitalz-kb-category-card">
+											<div class="yukdigitalz-kb-category-header">
+												<span class="yukdigitalz-kb-category-icon" aria-hidden="true">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-box"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+												</span>
+												<div class="yukdigitalz-kb-category-info">
+													<h3 class="yukdigitalz-kb-category-title">
+														<a href="<?php echo esc_url( get_term_link( $sub_cat ) ); ?>">
+															<?php echo esc_html( $sub_cat->name ); ?>
+														</a>
+													</h3>
+													<span class="yukdigitalz-kb-category-count">
+														<?php
+														/* translators: %s: number of articles */
+														printf( esc_html( _n( '%s Article', '%s Articles', $sub_count, 'yukdigitalz-knowledge-base' ) ), esc_html( $sub_count ) );
+														?>
+													</span>
+												</div>
+											</div>
+
+											<?php if ( ! empty( $sub_cat->description ) ) : ?>
+												<p class="yukdigitalz-kb-category-desc"><?php echo esc_html( wp_trim_words( $sub_cat->description, 15 ) ); ?></p>
+											<?php endif; ?>
+
 											<ul class="yukdigitalz-kb-category-docs">
 												<?php if ( $sub_doc_query->have_posts() ) : ?>
 													<?php while ( $sub_doc_query->have_posts() ) : $sub_doc_query->the_post(); ?>
@@ -165,11 +181,18 @@ class Shortcode {
 													<li class="yukdigitalz-kb-no-docs"><?php esc_html_e( 'No articles in this category.', 'yukdigitalz-knowledge-base' ); ?></li>
 												<?php endif; ?>
 											</ul>
+
+											<a href="<?php echo esc_url( get_term_link( $sub_cat ) ); ?>" class="yukdigitalz-kb-view-all">
+												<?php
+												/* translators: %s: number of total articles */
+												printf( esc_html__( 'View All %s Articles', 'yukdigitalz-knowledge-base' ), esc_html( $sub_count ) );
+												?> &rarr;
+											</a>
 										</div>
 										<?php
 									}
 								} else {
-									// No subcategories - display direct articles
+									// No subcategories - display top category direct articles as a card
 									$doc_query = new \WP_Query( array(
 										'post_type'      => 'yukdigitalz_kb_doc',
 										'post_status'    => 'publish',
@@ -183,32 +206,60 @@ class Shortcode {
 										),
 									) );
 									?>
-									<ul class="yukdigitalz-kb-category-docs">
-										<?php if ( $doc_query->have_posts() ) : ?>
-											<?php while ( $doc_query->have_posts() ) : $doc_query->the_post(); ?>
-												<li>
-													<a href="<?php echo esc_url( get_permalink() ); ?>">
-														<span class="yukdigitalz-kb-doc-icon" aria-hidden="true">
-															<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-														</span>
-														<?php echo esc_html( get_the_title() ); ?>
+									<div class="yukdigitalz-kb-category-card">
+										<div class="yukdigitalz-kb-category-header">
+											<span class="yukdigitalz-kb-category-icon" aria-hidden="true">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+											</span>
+											<div class="yukdigitalz-kb-category-info">
+												<h3 class="yukdigitalz-kb-category-title">
+													<a href="<?php echo esc_url( get_term_link( $category ) ); ?>">
+														<?php echo esc_html( $category->name ); ?>
 													</a>
-												</li>
-											<?php endwhile; ?>
-											<?php wp_reset_postdata(); ?>
-										<?php else : ?>
-											<li class="yukdigitalz-kb-no-docs"><?php esc_html_e( 'No articles in this category.', 'yukdigitalz-knowledge-base' ); ?></li>
+												</h3>
+												<span class="yukdigitalz-kb-category-count">
+													<?php
+													/* translators: %s: number of articles */
+													printf( esc_html( _n( '%s Article', '%s Articles', $cat_doc_count, 'yukdigitalz-knowledge-base' ) ), esc_html( $cat_doc_count ) );
+													?>
+												</span>
+											</div>
+										</div>
+
+										<?php if ( ! empty( $category->description ) ) : ?>
+											<p class="yukdigitalz-kb-category-desc"><?php echo esc_html( wp_trim_words( $category->description, 15 ) ); ?></p>
 										<?php endif; ?>
-									</ul>
+
+										<ul class="yukdigitalz-kb-category-docs">
+											<?php if ( $doc_query->have_posts() ) : ?>
+												<?php while ( $doc_query->have_posts() ) : $doc_query->the_post(); ?>
+													<li>
+														<a href="<?php echo esc_url( get_permalink() ); ?>">
+															<span class="yukdigitalz-kb-doc-icon" aria-hidden="true">
+																<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+															</span>
+															<?php echo esc_html( get_the_title() ); ?>
+														</a>
+													</li>
+												<?php endwhile; ?>
+												<?php wp_reset_postdata(); ?>
+											<?php else : ?>
+												<li class="yukdigitalz-kb-no-docs"><?php esc_html_e( 'No articles in this category.', 'yukdigitalz-knowledge-base' ); ?></li>
+											<?php endif; ?>
+										</ul>
+
+										<a href="<?php echo esc_url( get_term_link( $category ) ); ?>" class="yukdigitalz-kb-view-all">
+											<?php
+											/* translators: %s: number of total articles */
+											printf( esc_html__( 'View All %s Articles', 'yukdigitalz-knowledge-base' ), esc_html( $cat_doc_count ) );
+											?> &rarr;
+										</a>
+									</div>
 									<?php
 								}
 								?>
 							</div>
-
-							<a href="<?php echo esc_url( get_term_link( $category ) ); ?>" class="yukdigitalz-kb-view-all">
-								<?php esc_html_e( 'View All Articles', 'yukdigitalz-knowledge-base' ); ?> &rarr;
-							</a>
-						</div>
+						</section>
 						<?php
 					}
 				} else {

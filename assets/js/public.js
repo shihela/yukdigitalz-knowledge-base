@@ -249,6 +249,7 @@ function initLiveSearch() {
 						html += `
 							<li id="search-result-${index}" class="yukdigitalz-kb-search-result-item" role="option" data-url="${item.permalink}">
 								<a href="${item.permalink}">
+									${item.category ? `<span class="yukdigitalz-kb-result-cat">${item.category}</span>` : ''}
 									<div class="yukdigitalz-kb-result-title">${item.title}</div>
 									${item.excerpt ? `<div class="yukdigitalz-kb-result-excerpt">${item.excerpt}</div>` : ''}
 								</a>
@@ -293,9 +294,11 @@ function initLiveSearch() {
 			focusedIndex = (focusedIndex - 1 + items.length) % items.length;
 			highlightItem(items);
 		} else if (e.key === 'Enter') {
+			e.preventDefault();
 			if (focusedIndex >= 0 && focusedIndex < items.length) {
-				e.preventDefault();
 				window.location.href = items[focusedIndex].getAttribute('data-url');
+			} else if (items.length > 0) {
+				window.location.href = items[0].getAttribute('data-url');
 			}
 		} else if (e.key === 'Escape') {
 			resultsContainer.style.display = 'none';

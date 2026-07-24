@@ -343,6 +343,19 @@
 	color: var(--yukdigitalz-kb-text-muted);
 }
 
+.yukdigitalz-kb-result-cat {
+	display: inline-block !important;
+	font-size: 0.72rem !important;
+	font-weight: 700 !important;
+	color: var(--yukdigitalz-kb-primary) !important;
+	background: rgba(37, 99, 235, 0.08) !important;
+	padding: 2px 8px !important;
+	border-radius: 4px !important;
+	margin-bottom: 4px !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.03em !important;
+}
+
 .yukdigitalz-kb-search-no-results,
 .yukdigitalz-kb-search-error {
 	padding: 20px;
@@ -351,10 +364,67 @@
 	font-size: 0.9rem;
 }
 
-/* Categories Grid */
+/* Portal Section & Multi-Column Product Grid */
+.yukdigitalz-kb-portal-section {
+	margin-bottom: 44px;
+}
+
+.yukdigitalz-kb-portal-section-header {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 24px;
+	padding-bottom: 16px;
+	border-bottom: 2px solid var(--yukdigitalz-kb-border);
+}
+
+.yukdigitalz-kb-portal-section-icon {
+	color: var(--yukdigitalz-kb-primary);
+	background: rgba(37, 99, 235, 0.08);
+	padding: 12px;
+	border-radius: var(--yukdigitalz-kb-radius-sm);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.yukdigitalz-kb-portal-section-icon svg {
+	width: 28px;
+	height: 28px;
+}
+
+.yukdigitalz-kb-portal-section-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.yukdigitalz-kb-portal-section-title {
+	font-size: 1.5rem;
+	font-weight: 800;
+	margin: 0;
+	color: var(--yukdigitalz-kb-text-main);
+}
+
+.yukdigitalz-kb-portal-section-title a {
+	color: inherit !important;
+	text-decoration: none !important;
+}
+
+.yukdigitalz-kb-portal-section-title a:hover {
+	color: var(--yukdigitalz-kb-primary) !important;
+}
+
+.yukdigitalz-kb-portal-section-count {
+	font-size: 0.85rem;
+	color: var(--yukdigitalz-kb-text-muted);
+	font-weight: 600;
+	margin-top: 2px;
+}
+
+.yukdigitalz-kb-subcat-grid,
 .yukdigitalz-kb-categories-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
 	gap: 28px;
 }
 

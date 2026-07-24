@@ -56,11 +56,15 @@ class Ajax {
 		if ( $search_query->have_posts() ) {
 			while ( $search_query->have_posts() ) {
 				$search_query->the_post();
+				$terms    = get_the_terms( get_the_ID(), 'yukdigitalz_kb_cat' );
+				$cat_name = ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
+
 				$results[] = array(
 					'id'        => get_the_ID(),
 					'title'     => esc_html( get_the_title() ),
 					'permalink' => esc_url( get_permalink() ),
 					'excerpt'   => esc_html( wp_trim_words( get_the_excerpt(), 15 ) ),
+					'category'  => esc_html( $cat_name ),
 				);
 			}
 			wp_reset_postdata();
