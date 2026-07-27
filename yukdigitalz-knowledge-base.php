@@ -23,11 +23,11 @@ define( 'YUKDIGITALZ_KB_PATH', plugin_dir_path( __FILE__ ) );
 define( 'YUKDIGITALZ_KB_URL', plugin_dir_url( __FILE__ ) );
 
 /**
- * Autoloader for Yukdigitalz Knowledge Base classes under the 'YukdigitalzKnowledgeBase' namespace.
- * Maps 'YukdigitalzKnowledgeBase\ClassName' to 'includes/class-classname.php' (lowercased, underscore replaced with hyphen).
+ * Autoloader for Yukdigitalz Knowledge Base classes under the 'Shihela\YukdigitalzKnowledgeBase' namespace.
+ * Maps 'Shihela\YukdigitalzKnowledgeBase\ClassName' to 'includes/class-classname.php' (lowercased, underscore replaced with hyphen).
  */
 spl_autoload_register( function ( $class ) {
-	$prefix = 'YukdigitalzKnowledgeBase\\';
+	$prefix = 'Shihela\\YukdigitalzKnowledgeBase\\';
 	$base_dir = YUKDIGITALZ_KB_PATH . 'includes/';
 
 	$len = strlen( $prefix );
@@ -51,8 +51,8 @@ spl_autoload_register( function ( $class ) {
  */
 register_activation_hook( __FILE__, function() {
 	// Trigger CPT registration to flush rewrite rules
-	if ( class_exists( 'YukdigitalzKnowledgeBase\CPT' ) ) {
-		$cpt = new YukdigitalzKnowledgeBase\CPT();
+	if ( class_exists( 'Shihela\YukdigitalzKnowledgeBase\CPT' ) ) {
+		$cpt = new Shihela\YukdigitalzKnowledgeBase\CPT();
 		$cpt->register_post_type();
 		$cpt->register_taxonomy();
 	}
@@ -70,8 +70,8 @@ register_deactivation_hook( __FILE__, function() {
  * Initialize and run the plugin
  */
 function yukdigitalz_kb_run() {
-	if ( class_exists( 'YukdigitalzKnowledgeBase\Plugin' ) ) {
-		$plugin = new YukdigitalzKnowledgeBase\Plugin();
+	if ( class_exists( 'Shihela\YukdigitalzKnowledgeBase\Plugin' ) ) {
+		$plugin = new Shihela\YukdigitalzKnowledgeBase\Plugin();
 		$plugin->run();
 	}
 }

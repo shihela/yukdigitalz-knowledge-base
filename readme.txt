@@ -14,12 +14,12 @@ An enterprise-grade, high-performance Knowledge Base and Documentation plugin fo
 
 Yukdigitalz Knowledge Base is a lightweight, secure, and accessible documentation plugin for WordPress. Designed for enterprise-level performance and premium modern aesthetics, it provides a seamless repository-ready system to publish, manage, and interact with your technical resources.
 
-In addition to traditional Knowledge Base grids and navigation, Yukdigitalz Knowledge Base is equipped with a state-of-the-art **RAG AI Chat Assistant** drawer (SaaS style). The AI assistant utilizes Retrieval-Augmented Generation (RAG) to scan your published articles, retrieve matching context, and reply contextually. It leverages the native WordPress AI Client and falls back to a direct Google Gemini API connection. To protect your server and API keys from quota exhaustion, it features robust Hashed IP Rate Limiting and client-side anti-spam cooldown mechanisms.
+In addition to traditional Knowledge Base grids and navigation, Yukdigitalz Knowledge Base is equipped with a state-of-the-art **RAG AI Chat Assistant** drawer (SaaS style). The AI assistant utilizes Retrieval-Augmented Generation (RAG) to scan your published articles, retrieve matching context, and reply contextually. It leverages the native WordPress AI Client. To protect your server from quota exhaustion, it features robust Hashed IP Rate Limiting and client-side anti-spam cooldown mechanisms.
 
 == Features ==
 
-* **SaaS-Style AI Chat Assistant (RAG)**: A floating spark button slides out a contextual chat drawer. The assistant automatically queries the knowledge base (`yukdigitalz_kb_doc`), inserts matching content records as context, and replies contextually using Gemini.
-* **WordPress Native AI Client & Gemini API Fallback**: Seamlessly hooks into `wp_ai_client_prompt` to leverage options configured in your WP dashboard, with direct backup API configurations.
+* **SaaS-Style AI Chat Assistant (RAG)**: A floating spark button slides out a contextual chat drawer. The assistant automatically queries the knowledge base (`yukdigitalz_kb_doc`), inserts matching content records as context, and replies contextually using AI.
+* **WordPress Native AI Client**: Seamlessly hooks into `wp_ai_client_prompt` to leverage AI options configured in your WP dashboard.
 * **AI Chat Rate Limiting & Anti-Spam Security**: Built-in privacy-safe hashed IP request tracking via WordPress Transients (limits maximum queries per hour per user) and client-side cooldown locks.
 * **Premium Performance Layouts**: Built entirely using zero-dependency, modern Vanilla JS and lightweight clean CSS (fully compatible with Gutenberg, Classic Editor, and Block/FSE Themes).
 * **AJAX Live Search**: Accessible instant searching matching post titles, categories, and article snippets with a loading indicator.
@@ -27,7 +27,7 @@ In addition to traditional Knowledge Base grids and navigation, Yukdigitalz Know
 * **Automatic Table of Contents (TOC)**: Dynamically parses `h2` and `h3` tags inside article content to render a floating index widget.
 * **Helpfulness Feedback Widget**: AJAX-based user voting ("Was this article helpful?") with custom cookie session locks to prevent spam ratings.
 * **Breadcrumbs Navigation**: Automated microdata-ready hierarchical path links at the top of individual documentation pages.
-* **Enterprise Customizer Settings**: A premium, tabbed dashboard options page allowing you to configure custom base slugs, primary hover colors, rating widgets, TOCs, Q&A Comments toggle, rate limit parameters, and API credentials.
+* **Enterprise Customizer Settings**: A premium, tabbed dashboard options page allowing you to configure custom base slugs, primary hover colors, rating widgets, TOCs, Q&A Comments toggle, and rate limit parameters.
 
 == Installation ==
 

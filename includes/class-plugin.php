@@ -1,5 +1,5 @@
 <?php
-namespace YukdigitalzKnowledgeBase;
+namespace Shihela\YukdigitalzKnowledgeBase;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {

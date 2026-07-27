@@ -1,5 +1,5 @@
 <?php
-namespace YukdigitalzKnowledgeBase;
+namespace Shihela\YukdigitalzKnowledgeBase;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -148,8 +148,8 @@ class Ajax {
 		$enable_rate_limit = (int) get_option( 'yukdigitalz_kb_enable_rate_limit', 1 );
 		if ( $enable_rate_limit ) {
 			$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-			$hashed_ip = md5( $ip . 'ykb_salt_security_123' );
-			$limit_key = 'ykb_limit_' . $hashed_ip;
+			$hashed_ip = md5( $ip . 'yukdigitalz_kb_salt_security' );
+			$limit_key = 'yukdigitalz_kb_ratelimit_' . $hashed_ip;
 			
 			$max_queries = (int) get_option( 'yukdigitalz_kb_rate_limit_count', 20 );
 			$limit_data = get_transient( $limit_key );
@@ -258,74 +258,13 @@ class Ajax {
 			}
 		}
 
-		// Scenario B: Fallback to direct Google Gemini API call
+		// Fallback: Allow Pro plugin or extensions to handle AI response if WP AI Client is empty
 		if ( empty( $ai_response ) ) {
-			$api_key = get_option( 'yukdigitalz_kb_gemini_api_key' );
+			$ai_response = apply_filters( 'yukdigitalz_kb_ai_fallback_response', '', $message, $system_prompt, $chat_history );
+		}
 
-			// Check backup option from Gitaz Command Center plugin
-			if ( empty( $api_key ) ) {
-				$api_key = get_option( 'gitaz_ai_gemini_key' );
-			}
-
-			if ( empty( $api_key ) ) {
-				wp_send_json_error( array( 'message' => esc_html__( 'Gemini API Key is not configured. Please configure it in your Settings.', 'yukdigitalz-knowledge-base' ) ) );
-			}
-
-			$api_url  = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=' . $api_key;
-			$contents = array();
-
-			// Format conversation history for Gemini API DTO structure
-			if ( is_array( $chat_history ) ) {
-				foreach ( $chat_history as $msg ) {
-					$role       = ( isset( $msg['role'] ) && 'user' === $msg['role'] ) ? 'user' : 'model';
-					$contents[] = array(
-						'role'  => $role,
-						'parts' => array(
-							array( 'text' => $msg['content'] )
-						)
-					);
-				}
-			}
-
-			// Add current user prompt
-			$contents[] = array(
-				'role'  => 'user',
-				'parts' => array(
-					array( 'text' => $message )
-				)
-			);
-
-			$payload = array(
-				'contents'          => $contents,
-				'systemInstruction' => array(
-					'parts' => array(
-						array( 'text' => $system_prompt )
-					)
-				),
-				'generationConfig'  => array(
-					'temperature' => 0.5,
-				)
-			);
-
-			$response = wp_remote_post( $api_url, array(
-				'headers' => array( 'Content-Type' => 'application/json' ),
-				'body'    => wp_json_encode( $payload ),
-				'timeout' => 15,
-			) );
-
-			if ( is_wp_error( $response ) ) {
-				wp_send_json_error( array( 'message' => $response->get_error_message() ) );
-			}
-
-			$body = wp_remote_retrieve_body( $response );
-			$data = json_decode( $body, true );
-
-			if ( isset( $data['candidates'][0]['content']['parts'][0]['text'] ) ) {
-				$ai_response = $data['candidates'][0]['content']['parts'][0]['text'];
-			} else {
-				$error_msg = isset( $data['error']['message'] ) ? $data['error']['message'] : __( 'Failed to communicate with Gemini API.', 'yukdigitalz-knowledge-base' );
-				wp_send_json_error( array( 'message' => $error_msg ) );
-			}
+		if ( empty( $ai_response ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'WordPress AI Client is not configured. Please activate and configure the WordPress AI Client plugin to enable AI features.', 'yukdigitalz-knowledge-base' ) ) );
 		}
 
 		wp_send_json_success( array( 'response' => $ai_response ) );

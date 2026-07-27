@@ -57,7 +57,6 @@
 
 	// Also run on DOMContentLoaded just in case
 	document.addEventListener('DOMContentLoaded', initShadowRootFixes);
-})();
 
 /**
  * Helper to retrieve active roots (both Light DOM document and all active Shadow Roots).
@@ -137,6 +136,24 @@ document.addEventListener('DOMContentLoaded', function() {
  * Sidebar Accordion functionality with state preservation via localStorage.
  */
 function initSidebarAccordion() {
+	// Mobile Sidebar Accordion Toggle
+	const mobileToggles = querySelectorAllKB('.yukdigitalz-kb-mobile-nav-toggle');
+	mobileToggles.forEach(toggle => {
+		toggle.addEventListener('click', function(e) {
+			e.preventDefault();
+			const sidebarNav = toggle.closest('.yukdigitalz-kb-sidebar-nav');
+			if (!sidebarNav) return;
+			const isExpanded = sidebarNav.classList.contains('mobile-expanded');
+			if (isExpanded) {
+				sidebarNav.classList.remove('mobile-expanded');
+				toggle.setAttribute('aria-expanded', 'false');
+			} else {
+				sidebarNav.classList.add('mobile-expanded');
+				toggle.setAttribute('aria-expanded', 'true');
+			}
+		});
+	});
+
 	const headers = querySelectorAllKB('.yukdigitalz-kb-sidebar-cat-header');
 	if (headers.length === 0) {
 		return;
@@ -506,6 +523,7 @@ function initFeedbackVoting() {
 function initAIChat() {
 	const triggerBtn = getElementByIdKB('yukdigitalz-kb-ai-trigger');
 	const closeBtn   = getElementByIdKB('yukdigitalz-kb-ai-close');
+	const backdrop   = getElementByIdKB('yukdigitalz-kb-ai-backdrop');
 	const drawer     = getElementByIdKB('yukdigitalz-kb-ai-drawer');
 	const layout     = document.querySelector('.yukdigitalz-kb-doc-layout') || querySelectorKB('.yukdigitalz-kb-doc-layout');
 
@@ -523,39 +541,60 @@ function initAIChat() {
 		return;
 	}
 
-	// Open drawer logic
-	if (triggerBtn) {
-		triggerBtn.addEventListener('click', function() {
-			drawer.classList.add('open');
-			drawer.setAttribute('aria-hidden', 'false');
-			if (layout) {
-				layout.classList.add('ai-drawer-open');
-			}
-			document.documentElement.classList.add('ai-drawer-open');
-			document.body.classList.add('ai-drawer-open');
+	function openAIDrawer() {
+		drawer.classList.add('open');
+		drawer.setAttribute('aria-hidden', 'false');
+		if (backdrop) {
+			backdrop.classList.add('open');
+			backdrop.setAttribute('aria-hidden', 'false');
+		}
+		if (layout) {
+			layout.classList.add('ai-drawer-open');
+		}
+		document.documentElement.classList.add('ai-drawer-open');
+		document.body.classList.add('ai-drawer-open');
+		if (triggerBtn) {
 			triggerBtn.style.opacity = '0';
 			triggerBtn.style.pointerEvents = 'none';
-			setTimeout(() => {
-				chatInput.focus();
-			}, 300);
-		});
+		}
+		setTimeout(() => {
+			chatInput.focus();
+		}, 300);
+	}
+
+	function closeAIDrawer() {
+		drawer.classList.remove('open');
+		drawer.setAttribute('aria-hidden', 'true');
+		if (backdrop) {
+			backdrop.classList.remove('open');
+			backdrop.setAttribute('aria-hidden', 'true');
+		}
+		if (layout) {
+			layout.classList.remove('ai-drawer-open');
+		}
+		document.documentElement.classList.remove('ai-drawer-open');
+		document.body.classList.remove('ai-drawer-open');
+		if (triggerBtn) {
+			triggerBtn.style.opacity = '1';
+			triggerBtn.style.pointerEvents = 'auto';
+		}
+	}
+
+	window.yukdigitalzKBOpenAIDrawer = openAIDrawer;
+	window.yukdigitalzKBCloseAIDrawer = closeAIDrawer;
+
+	// Open drawer logic
+	if (triggerBtn) {
+		triggerBtn.addEventListener('click', openAIDrawer);
 	}
 
 	// Close drawer logic
 	if (closeBtn) {
-		closeBtn.addEventListener('click', function() {
-			drawer.classList.remove('open');
-			drawer.setAttribute('aria-hidden', 'true');
-			if (layout) {
-				layout.classList.remove('ai-drawer-open');
-			}
-			document.documentElement.classList.remove('ai-drawer-open');
-			document.body.classList.remove('ai-drawer-open');
-			if (triggerBtn) {
-				triggerBtn.style.opacity = '1';
-				triggerBtn.style.pointerEvents = 'auto';
-			}
-		});
+		closeBtn.addEventListener('click', closeAIDrawer);
+	}
+
+	if (backdrop) {
+		backdrop.addEventListener('click', closeAIDrawer);
 	}
 
 	let conversationHistory = [];
@@ -705,8 +744,7 @@ function initAIChat() {
 }
 
 /**
- * Injects a Cloudflare-style header pill button for the AI assistant inside Shadow DOM layouts
- * and hides the native floating FAB button.
+ * Injects a Cloudflare-style header pill button for the AI assistant inside Shadow DOM layouts.
  */
 function injectAIHeaderButton() {
 	// Inject Light DOM layout transitions so they cleanly override theme wrappers
@@ -718,6 +756,15 @@ function injectAIHeaderButton() {
 			body.ai-drawer-open {
 				padding-right: 0 !important;
 			}
+			@media (max-width: 1024px) {
+				.yukdigitalz-kb-doc-layout.ai-drawer-open {
+					position: relative !important;
+					z-index: 2147483647 !important;
+				}
+				body.ai-drawer-open > *:not(.yukdigitalz-kb-doc-layout):not(script):not(style):not(link) {
+					z-index: 1 !important;
+				}
+			}
 		`;
 		document.head.appendChild(lightStyle);
 	}
@@ -727,19 +774,15 @@ function injectAIHeaderButton() {
 		const shadowRoot = host.shadowRoot;
 		if (!shadowRoot) return;
 
-		// 1. Hide the native floating FAB button trigger
-		const fab = shadowRoot.querySelector('#yukdigitalz-kb-ai-trigger');
-		if (fab) {
-			fab.style.display = 'none';
-		}
-
-		// 2. Inject styling overrides directly into the Shadow DOM context
+		// 1. Inject styling overrides directly into the Shadow DOM context
 		if (!shadowRoot.querySelector('#yukdigitalz-kb-pro-ai-inject-styles')) {
 			const style = document.createElement('style');
 			style.id = 'yukdigitalz-kb-pro-ai-inject-styles';
 			style.textContent = `
-				#yukdigitalz-kb-ai-trigger {
-					display: none !important;
+				@media (min-width: 1025px) {
+					#yukdigitalz-kb-ai-trigger {
+						display: none !important;
+					}
 				}
 				.yukdigitalz-kb-article-header,
 				.yukdigitalz-kb-archive-header {
@@ -783,7 +826,7 @@ function injectAIHeaderButton() {
 			shadowRoot.appendChild(style);
 		}
 
-		// 3. Locate the header to append the button
+		// 2. Locate the header to append the button
 		const articleHeader = shadowRoot.querySelector('.yukdigitalz-kb-article-header') || shadowRoot.querySelector('.yukdigitalz-kb-archive-header');
 		if (articleHeader && !articleHeader.querySelector('.yukdigitalz-kb-ai-header-btn')) {
 			// Wrap current header child nodes inside a left-aligned container
@@ -804,10 +847,16 @@ function injectAIHeaderButton() {
 			`;
 
 			// Bind trigger action
-			aiBtn.addEventListener('click', function() {
-				const trigger = shadowRoot.querySelector('#yukdigitalz-kb-ai-trigger');
-				if (trigger) {
-					trigger.click();
+			aiBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				if (typeof window.yukdigitalzKBOpenAIDrawer === 'function') {
+					window.yukdigitalzKBOpenAIDrawer();
+				} else {
+					const trigger = shadowRoot.querySelector('#yukdigitalz-kb-ai-trigger');
+					if (trigger) {
+						trigger.click();
+					}
 				}
 			});
 
@@ -815,3 +864,4 @@ function injectAIHeaderButton() {
 		}
 	});
 }
+})();

@@ -1,5 +1,5 @@
 <?php
-namespace YukdigitalzKnowledgeBase;
+namespace Shihela\YukdigitalzKnowledgeBase;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -91,10 +91,6 @@ class Settings {
 		register_setting( 'yukdigitalz_kb_settings_group', 'yukdigitalz_kb_enable_comments', array(
 			'sanitize_callback' => 'absint',
 			'default'           => 0,
-		) );
-		register_setting( 'yukdigitalz_kb_settings_group', 'yukdigitalz_kb_gemini_api_key', array(
-			'sanitize_callback' => 'sanitize_text_field',
-			'default'           => '',
 		) );
 
 		// Security/AI Anti-Spam Rate Limit Settings
@@ -393,13 +389,6 @@ class Settings {
 								</fieldset>
 							</td>
 						</tr>
-						<tr>
-							<th scope="row"><label for="yukdigitalz_kb_gemini_api_key"><?php esc_html_e( 'Gemini API Key', 'yukdigitalz-knowledge-base' ); ?></label></th>
-							<td>
-								<input name="yukdigitalz_kb_gemini_api_key" type="password" id="yukdigitalz_kb_gemini_api_key" value="<?php echo esc_attr( get_option( 'yukdigitalz_kb_gemini_api_key', '' ) ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Optional if native WordPress AI client is active', 'yukdigitalz-knowledge-base' ); ?>" autocomplete="new-password" />
-								<p class="description"><?php esc_html_e( 'Direct fallback API Key for Google Gemini. If empty, the system tries to use WordPress native AI Client.', 'yukdigitalz-knowledge-base' ); ?></p>
-							</td>
-						</tr>
 					</table>
 				</div>
 
@@ -440,7 +429,7 @@ class Settings {
 					) );
 					
 					// Sort them first using the template sort helper
-					if ( class_exists( 'YukdigitalzKnowledgeBase\Templates' ) ) {
+					if ( class_exists( 'Shihela\YukdigitalzKnowledgeBase\Templates' ) ) {
 						$categories = Templates::sort_categories( $categories );
 					}
 					

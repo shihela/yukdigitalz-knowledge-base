@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-\YukdigitalzKnowledgeBase\Templates::get_header();
+\Shihela\YukdigitalzKnowledgeBase\Templates::get_header();
 
 $yukdigitalz_kb_current_term    = get_queried_object();
 $yukdigitalz_kb_current_term_id = $yukdigitalz_kb_current_term->term_id;
@@ -26,9 +26,13 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 		<div class="yukdigitalz-kb-doc-layout-inner">
 	<!-- Left Sidebar: Collapsible Categories Accordion -->
 	<aside class="yukdigitalz-kb-sidebar-nav" aria-label="<?php esc_attr_e( 'Documentation Navigation', 'yukdigitalz-knowledge-base' ); ?>">
+		<button type="button" class="yukdigitalz-kb-mobile-nav-toggle" aria-expanded="false">
+			<span><?php esc_html_e( 'Browse Categories', 'yukdigitalz-knowledge-base' ); ?></span>
+			<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="yukdigitalz-kb-mobile-chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+		</button>
 		<h2 class="yukdigitalz-kb-sidebar-title"><?php esc_html_e( 'Categories', 'yukdigitalz-knowledge-base' ); ?></h2>
 		<div class="yukdigitalz-kb-sidebar-accordion">
-			<?php \YukdigitalzKnowledgeBase\Templates::render_sidebar_navigation( 0, $yukdigitalz_kb_current_term_id ); ?>
+			<?php \Shihela\YukdigitalzKnowledgeBase\Templates::render_sidebar_navigation( 0, $yukdigitalz_kb_current_term_id ); ?>
 		</div>
 	</aside>
 
@@ -93,6 +97,8 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-aperture" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="14.31" y1="8" x2="20.05" y2="17.94"></line><line x1="9.69" y1="8" x2="21.17" y2="8"></line><line x1="7.38" y1="12" x2="13.12" y2="2.06"></line><line x1="9.69" y1="16" x2="3.95" y2="6.06"></line><line x1="14.31" y1="16" x2="2.83" y2="16"></line><line x1="16.62" y1="12" x2="10.88" y2="21.94"></line></svg>
 		</button>
 
+		<div id="yukdigitalz-kb-ai-backdrop" class="yukdigitalz-kb-ai-backdrop" aria-hidden="true"></div>
+
 		<div id="yukdigitalz-kb-ai-drawer" class="yukdigitalz-kb-ai-drawer" aria-hidden="true">
 			<div class="yukdigitalz-kb-ai-drawer-header">
 				<div class="yukdigitalz-kb-ai-drawer-title">
@@ -126,4 +132,4 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 </div>
 
 <?php
-\YukdigitalzKnowledgeBase\Templates::get_footer();
+\Shihela\YukdigitalzKnowledgeBase\Templates::get_footer();

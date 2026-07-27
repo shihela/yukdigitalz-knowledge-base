@@ -29,9 +29,11 @@ $yukdigitalz_kb_options = array(
 	'yukdigitalz_kb_enable_reading_time',
 	'yukdigitalz_kb_enable_ai_chat',
 	'yukdigitalz_kb_enable_comments',
-	'yukdigitalz_kb_gemini_api_key',
 	'yukdigitalz_kb_enable_rate_limit',
 	'yukdigitalz_kb_rate_limit_count',
+	'yukdigitalz_kb_archive_posts_per_page',
+	'yukdigitalz_kb_search_logs',
+	'yukdigitalz_kb_category_order',
 );
 
 foreach ( $yukdigitalz_kb_options as $yukdigitalz_kb_option ) {
