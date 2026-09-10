@@ -69,6 +69,9 @@ This plugin supports optional third-party integrations:
 * Added visual Video Guide indicator badges in the sidebar accordion, category archive cards, and portal grid.
 * Added third-party embedded video privacy disclosure in compliance with WordPress.org guidelines.
 
+= 1.1.1 =
+* Fixed Ask AI modal buttons and floating trigger styling isolation against active WordPress theme CSS overrides.
+
 = 1.1.0 =
 * Added Smart Category Templates: Parent Category Product Showcase Directory Grid vs Child Category Documentation Hub.
 * Enhanced hierarchical permalink structure (domain/docs/{category}/{guide}) with seamless multi-level ancestor support.
