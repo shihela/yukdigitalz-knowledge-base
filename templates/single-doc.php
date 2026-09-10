@@ -163,6 +163,50 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 				</section>
 			<?php endif; ?>
 
+			<!-- Sequential Article Navigation (Previous / Next) -->
+			<?php
+			$yukdigitalz_kb_enable_doc_nav = (int) get_option( 'yukdigitalz_kb_enable_doc_navigation', 1 );
+			if ( $yukdigitalz_kb_enable_doc_nav ) :
+				$yukdigitalz_kb_nav_docs = \Shihela\YukdigitalzKnowledgeBase\Templates::get_adjacent_docs( $yukdigitalz_kb_current_post_id );
+				$yukdigitalz_kb_prev_doc = $yukdigitalz_kb_nav_docs['prev'];
+				$yukdigitalz_kb_next_doc = $yukdigitalz_kb_nav_docs['next'];
+
+				if ( $yukdigitalz_kb_prev_doc || $yukdigitalz_kb_next_doc ) :
+					?>
+					<nav class="yukdigitalz-kb-article-nav" aria-label="<?php esc_attr_e( 'Article navigation', 'yukdigitalz-knowledge-base' ); ?>">
+						<?php if ( $yukdigitalz_kb_prev_doc ) : ?>
+							<a href="<?php echo esc_url( $yukdigitalz_kb_prev_doc['permalink'] ); ?>" class="yukdigitalz-kb-nav-card yukdigitalz-kb-nav-prev" rel="prev">
+								<div class="yukdigitalz-kb-nav-icon">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+								</div>
+								<div class="yukdigitalz-kb-nav-content">
+									<span class="yukdigitalz-kb-nav-label"><?php esc_html_e( 'Previous Article', 'yukdigitalz-knowledge-base' ); ?></span>
+									<span class="yukdigitalz-kb-nav-title"><?php echo esc_html( $yukdigitalz_kb_prev_doc['title'] ); ?></span>
+								</div>
+							</a>
+						<?php else : ?>
+							<div class="yukdigitalz-kb-nav-spacer" aria-hidden="true"></div>
+						<?php endif; ?>
+
+						<?php if ( $yukdigitalz_kb_next_doc ) : ?>
+							<a href="<?php echo esc_url( $yukdigitalz_kb_next_doc['permalink'] ); ?>" class="yukdigitalz-kb-nav-card yukdigitalz-kb-nav-next" rel="next">
+								<div class="yukdigitalz-kb-nav-content">
+									<span class="yukdigitalz-kb-nav-label"><?php esc_html_e( 'Next Article', 'yukdigitalz-knowledge-base' ); ?></span>
+									<span class="yukdigitalz-kb-nav-title"><?php echo esc_html( $yukdigitalz_kb_next_doc['title'] ); ?></span>
+								</div>
+								<div class="yukdigitalz-kb-nav-icon">
+									<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+								</div>
+							</a>
+						<?php else : ?>
+							<div class="yukdigitalz-kb-nav-spacer" aria-hidden="true"></div>
+						<?php endif; ?>
+					</nav>
+					<?php
+				endif;
+			endif;
+			?>
+
 			<!-- Comments Template for Q&A Discussions -->
 			<?php if ( $yukdigitalz_kb_enable_comments && ( comments_open() || get_comments_number() ) ) : ?>
 				<div class="yukdigitalz-kb-comments-wrapper">

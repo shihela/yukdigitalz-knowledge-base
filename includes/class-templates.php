@@ -226,6 +226,79 @@ class Templates {
 	}
 
 	/**
+	 * Retrieves adjacent (previous and next) articles within the same category taxonomy.
+	 * Articles are sequenced by menu_order ASC, date ASC, ID ASC.
+	 *
+	 * @param int $post_id Current doc post ID.
+	 * @return array Array containing 'prev' and 'next' doc data or null.
+	 */
+	public static function get_adjacent_docs( $post_id ) {
+		$categories   = get_the_terms( $post_id, 'yukdigitalz_kb_cat' );
+		$current_term = ( ! empty( $categories ) && ! is_wp_error( $categories ) ) ? $categories[0] : null;
+
+		$query_args = array(
+			'post_type'              => 'yukdigitalz_kb_doc',
+			'post_status'            => 'publish',
+			'posts_per_page'         => -1,
+			'orderby'                => array(
+				'menu_order' => 'ASC',
+				'date'       => 'ASC',
+				'ID'         => 'ASC',
+			),
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		);
+
+		if ( $current_term ) {
+			$query_args['tax_query'] = array(
+				array(
+					'taxonomy'         => 'yukdigitalz_kb_cat',
+					'field'            => 'term_id',
+					'terms'            => $current_term->term_id,
+					'include_children' => false,
+				),
+			);
+		}
+
+		$query            = new \WP_Query( $query_args );
+		$category_doc_ids = $query->posts;
+
+		$prev_doc = null;
+		$next_doc = null;
+
+		if ( ! empty( $category_doc_ids ) && is_array( $category_doc_ids ) ) {
+			$int_ids       = array_map( 'intval', $category_doc_ids );
+			$current_index = array_search( (int) $post_id, $int_ids, true );
+
+			if ( false !== $current_index ) {
+				if ( $current_index > 0 ) {
+					$prev_id  = $int_ids[ $current_index - 1 ];
+					$prev_doc = array(
+						'id'        => $prev_id,
+						'title'     => get_the_title( $prev_id ),
+						'permalink' => get_permalink( $prev_id ),
+					);
+				}
+				if ( $current_index < count( $int_ids ) - 1 ) {
+					$next_id  = $int_ids[ $current_index + 1 ];
+					$next_doc = array(
+						'id'        => $next_id,
+						'title'     => get_the_title( $next_id ),
+						'permalink' => get_permalink( $next_id ),
+					);
+				}
+			}
+		}
+
+		return array(
+			'prev' => $prev_doc,
+			'next' => $next_doc,
+		);
+	}
+
+	/**
 	 * Renders hierarchical sidebar category navigation (Parent Categories -> Child Categories -> Articles).
 	 * Uses clean text links for category and product names with dedicated unstyled toggle buttons
 	 * to prevent conflicts with theme button CSS styles.

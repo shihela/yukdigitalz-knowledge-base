@@ -92,6 +92,10 @@ class Settings {
 			'sanitize_callback' => 'absint',
 			'default'           => 0,
 		) );
+		register_setting( 'yukdigitalz_kb_settings_group', 'yukdigitalz_kb_enable_doc_navigation', array(
+			'sanitize_callback' => 'absint',
+			'default'           => 1,
+		) );
 
 		// Security/AI Anti-Spam Rate Limit Settings
 		register_setting( 'yukdigitalz_kb_settings_group', 'yukdigitalz_kb_enable_rate_limit', array(
@@ -385,6 +389,18 @@ class Settings {
 									<label for="yukdigitalz_kb_enable_comments">
 										<input name="yukdigitalz_kb_enable_comments" type="checkbox" id="yukdigitalz_kb_enable_comments" value="1" <?php checked( 1, get_option( 'yukdigitalz_kb_enable_comments', 0 ) ); ?> />
 										<?php esc_html_e( 'Enable native comments at the bottom of documentation pages for discussion/Q&A.', 'yukdigitalz-knowledge-base' ); ?>
+									</label>
+								</fieldset>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row"><?php esc_html_e( 'Enable Article Navigation (Previous / Next)', 'yukdigitalz-knowledge-base' ); ?></th>
+							<td>
+								<fieldset>
+									<legend class="screen-reader-text"><span><?php esc_html_e( 'Enable Article Navigation (Previous / Next)', 'yukdigitalz-knowledge-base' ); ?></span></legend>
+									<label for="yukdigitalz_kb_enable_doc_navigation">
+										<input name="yukdigitalz_kb_enable_doc_navigation" type="checkbox" id="yukdigitalz_kb_enable_doc_navigation" value="1" <?php checked( 1, get_option( 'yukdigitalz_kb_enable_doc_navigation', 1 ) ); ?> />
+										<?php esc_html_e( 'Display previous and next article navigation cards at the bottom of documentation pages ordered within the same category.', 'yukdigitalz-knowledge-base' ); ?>
 									</label>
 								</fieldset>
 							</td>
