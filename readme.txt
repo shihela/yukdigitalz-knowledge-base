@@ -4,7 +4,7 @@ Tags: knowledge base, documentation, wiki, docs, rag ai assistant
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,10 @@ This plugin supports optional AI chat assistance powered by the WordPress AI Cli
 3. Slide-out RAG AI Chat Assistant drawer interface.
 
 == Changelog ==
+
+= 1.1.2 =
+* Fixed mobile Ask AI floating trigger to prevent visual collisions with third-party chat widgets.
+* Elevated Ask AI chat drawer directly to body stacking context to stay above third-party floating buttons.
 
 = 1.1.1 =
 * Fixed Ask AI modal buttons and floating trigger styling isolation against active WordPress theme CSS overrides.

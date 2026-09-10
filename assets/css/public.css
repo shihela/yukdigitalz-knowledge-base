@@ -1674,51 +1674,20 @@ svg.yukdigitalz-kb-mobile-chevron {
    AI CHAT ASSISTANT DRAWER (SAAS STYLE)
    ========================================== */
 
+/* Floating FAB is permanently hidden to avoid collisions with third-party chat widgets */
+#yukdigitalz-kb-ai-trigger,
 .yukdigitalz-kb-ai-trigger-fab {
-	all: unset !important;
-	box-sizing: border-box !important;
-	position: fixed !important;
-	bottom: 30px !important;
-	right: 30px !important;
-	width: 56px !important;
-	height: 56px !important;
-	min-width: 56px !important;
-	min-height: 56px !important;
-	max-width: 56px !important;
-	max-height: 56px !important;
-	padding: 0 !important;
+	display: none !important;
+	opacity: 0 !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+	width: 0 !important;
+	height: 0 !important;
 	margin: 0 !important;
-	border-radius: 50% !important;
-	background: var(--yukdigitalz-kb-primary, #2563eb) !important;
-	color: #ffffff !important;
+	padding: 0 !important;
 	border: none !important;
-	outline: none !important;
-	box-shadow: 0 4px 20px rgba(37, 99, 235, 0.35) !important;
-	display: flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	cursor: pointer !important;
-	z-index: 9999 !important;
-	transition: var(--yukdigitalz-kb-transition-smooth) !important;
-	line-height: 1 !important;
-	text-decoration: none !important;
-}
-
-.yukdigitalz-kb-ai-trigger-fab:hover {
-	background: var(--yukdigitalz-kb-secondary, #1d4ed8) !important;
-	transform: translateY(-3px) scale(1.05) !important;
-	box-shadow: 0 6px 24px rgba(37, 99, 235, 0.45) !important;
-	color: #ffffff !important;
-}
-
-.yukdigitalz-kb-ai-trigger-fab svg {
-	width: 24px !important;
-	height: 24px !important;
-	fill: none !important;
-	stroke: #ffffff !important;
-	stroke-width: 2 !important;
-	animation: yukdigitalz-kb-spin-slow 20s infinite linear;
-	flex-shrink: 0 !important;
+	position: absolute !important;
+	clip: rect(0, 0, 0, 0) !important;
 }
 
 @keyframes yukdigitalz-kb-spin-slow {
@@ -1914,12 +1883,14 @@ svg.yukdigitalz-kb-mobile-chevron {
 
 /* Chat Input Form */
 .yukdigitalz-kb-ai-chat-form {
-	display: flex;
-	border-top: 1px solid var(--yukdigitalz-kb-border);
-	padding: 16px;
-	padding-bottom: max(16px, env(safe-area-inset-bottom));
-	background: #f8fafc;
-	gap: 8px;
+	display: flex !important;
+	border-top: 1px solid var(--yukdigitalz-kb-border, #e2e8f0) !important;
+	padding: 16px !important;
+	padding-bottom: max(16px, env(safe-area-inset-bottom)) !important;
+	background: #f8fafc !important;
+	gap: 8px !important;
+	position: relative !important;
+	z-index: 2147483647 !important;
 }
 
 .yukdigitalz-kb-ai-chat-input {
@@ -2161,13 +2132,6 @@ svg.yukdigitalz-kb-mobile-chevron {
 
 	.yukdigitalz-kb-ai-drawer.open {
 		right: 0 !important;
-	}
-
-	.yukdigitalz-kb-ai-trigger-fab {
-		bottom: 20px !important;
-		right: 20px !important;
-		width: 48px !important;
-		height: 48px !important;
 	}
 }
 
