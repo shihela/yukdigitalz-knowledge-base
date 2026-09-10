@@ -583,6 +583,16 @@ function initAIChat() {
 	}
 
 	function openAIDrawer() {
+		// Hoist backdrop and drawer directly to document.body on mobile/tablet to break free from theme stacking contexts
+		if (window.innerWidth <= 1024 && drawer.parentElement !== document.body) {
+			drawer._parentContainer = drawer.parentElement;
+			drawer._nextSibling = drawer.nextSibling;
+			if (backdrop) {
+				document.body.appendChild(backdrop);
+			}
+			document.body.appendChild(drawer);
+		}
+
 		drawer.classList.add('open');
 		drawer.setAttribute('aria-hidden', 'false');
 		if (backdrop) {
@@ -594,10 +604,6 @@ function initAIChat() {
 		}
 		document.documentElement.classList.add('ai-drawer-open');
 		document.body.classList.add('ai-drawer-open');
-		if (triggerBtn) {
-			triggerBtn.style.opacity = '0';
-			triggerBtn.style.pointerEvents = 'none';
-		}
 		setTimeout(() => {
 			chatInput.focus();
 		}, 300);
@@ -615,9 +621,15 @@ function initAIChat() {
 		}
 		document.documentElement.classList.remove('ai-drawer-open');
 		document.body.classList.remove('ai-drawer-open');
-		if (triggerBtn) {
-			triggerBtn.style.opacity = '1';
-			triggerBtn.style.pointerEvents = 'auto';
+
+		// Restore elements to original parent container if hoisted
+		if (drawer && drawer._parentContainer) {
+			if (backdrop) {
+				drawer._parentContainer.insertBefore(backdrop, drawer._nextSibling);
+			}
+			drawer._parentContainer.insertBefore(drawer, drawer._nextSibling);
+			delete drawer._parentContainer;
+			delete drawer._nextSibling;
 		}
 	}
 

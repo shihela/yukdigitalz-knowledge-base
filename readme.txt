@@ -69,6 +69,10 @@ This plugin supports optional third-party integrations:
 * Added visual Video Guide indicator badges in the sidebar accordion, category archive cards, and portal grid.
 * Added third-party embedded video privacy disclosure in compliance with WordPress.org guidelines.
 
+= 1.1.2 =
+* Fixed mobile Ask AI floating trigger to prevent visual collisions with third-party chat widgets.
+* Elevated Ask AI chat drawer directly to body stacking context to stay above third-party floating buttons.
+
 = 1.1.1 =
 * Fixed Ask AI modal buttons and floating trigger styling isolation against active WordPress theme CSS overrides.
 
