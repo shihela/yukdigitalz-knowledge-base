@@ -84,13 +84,14 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 					<h1 class="yukdigitalz-kb-article-title"><?php echo esc_html( get_the_title() ); ?></h1>
 					<div class="yukdigitalz-kb-article-meta">
 						<span class="yukdigitalz-kb-meta-item">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" aria-hidden="true" style="width: 16px; height: 16px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" fill="none"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
 							<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
 						</span>
 						
 						<?php if ( $yukdigitalz_kb_enable_reading_time ) : ?>
+							<span class="yukdigitalz-kb-meta-divider" aria-hidden="true">&bull;</span>
 							<span class="yukdigitalz-kb-meta-item">
-								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock" aria-hidden="true" style="width: 16px; height: 16px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+								<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
 								<?php
 								/* translators: %s: number of reading minutes */
 								printf( esc_html( _n( '%s Min Read', '%s Mins Read', $yukdigitalz_kb_reading_time, 'yukdigitalz-knowledge-base' ) ), esc_html( $yukdigitalz_kb_reading_time ) );
@@ -130,12 +131,12 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 					<h3 class="yukdigitalz-kb-voting-title"><?php esc_html_e( 'Was this article helpful?', 'yukdigitalz-knowledge-base' ); ?></h3>
 					<div class="yukdigitalz-kb-vote-buttons">
 						<button class="yukdigitalz-kb-vote-btn" data-vote="helpful" aria-label="<?php esc_attr_e( 'Yes, this article was helpful', 'yukdigitalz-knowledge-base' ); ?>">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-thumbs-up" aria-hidden="true" style="width: 16px; height: 16px;"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-thumbs-up" aria-hidden="true" style="width: 16px; height: 16px;"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" fill="none"></path></svg>
 							<span><?php esc_html_e( 'Yes', 'yukdigitalz-knowledge-base' ); ?></span>
 							<span class="yukdigitalz-kb-helpful-count"><?php echo esc_html( $yukdigitalz_kb_helpful_count ); ?></span>
 						</button>
 						<button class="yukdigitalz-kb-vote-btn" data-vote="not_helpful" aria-label="<?php esc_attr_e( 'No, this article was not helpful', 'yukdigitalz-knowledge-base' ); ?>">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-thumbs-down" aria-hidden="true" style="width: 16px; height: 16px;"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"></path></svg>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-thumbs-down" aria-hidden="true" style="width: 16px; height: 16px;"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3" fill="none"></path></svg>
 							<span><?php esc_html_e( 'No', 'yukdigitalz-knowledge-base' ); ?></span>
 							<span class="yukdigitalz-kb-nothelpful-count"><?php echo esc_html( $yukdigitalz_kb_not_helpful_count ); ?></span>
 						</button>
@@ -177,13 +178,13 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 				<div class="yukdigitalz-kb-ai-chat-history">
 					<div class="yukdigitalz-kb-chat-message assistant">
 						<div class="yukdigitalz-kb-chat-bubble">
-							<?php esc_html_e( 'Halo! Saya asisten AI Yukdigitalz KB. Ada yang bisa saya bantu terkait dokumentasi kami?', 'yukdigitalz-knowledge-base' ); ?>
+							<?php esc_html_e( 'Hello! I am the Yukdigitalz KB AI Assistant. How can I help you with our documentation today?', 'yukdigitalz-knowledge-base' ); ?>
 						</div>
 					</div>
 				</div>
 				<form class="yukdigitalz-kb-ai-chat-form" onsubmit="event.preventDefault();">
-					<input type="text" placeholder="<?php esc_attr_e( 'Tanyakan sesuatu...', 'yukdigitalz-knowledge-base' ); ?>" class="yukdigitalz-kb-ai-chat-input" required />
-					<button type="submit" class="yukdigitalz-kb-ai-chat-submit" aria-label="<?php esc_attr_e( 'Kirim', 'yukdigitalz-knowledge-base' ); ?>">
+					<input type="text" placeholder="<?php esc_attr_e( 'Ask a question...', 'yukdigitalz-knowledge-base' ); ?>" class="yukdigitalz-kb-ai-chat-input" required />
+					<button type="submit" class="yukdigitalz-kb-ai-chat-submit" aria-label="<?php esc_attr_e( 'Send message', 'yukdigitalz-knowledge-base' ); ?>">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-send" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
 					</button>
 				</form>

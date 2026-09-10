@@ -72,7 +72,7 @@ class Shortcode {
 				$args = array(
 					'taxonomy'   => $taxonomy,
 					'parent'     => 0,
-					'hide_empty' => true,
+					'hide_empty' => false,
 				);
 
 				if ( ! empty( $atts['categories'] ) ) {
@@ -91,7 +91,7 @@ class Shortcode {
 						$sub_categories = get_terms( array(
 							'taxonomy'   => $taxonomy,
 							'parent'     => $category->term_id,
-							'hide_empty' => true,
+							'hide_empty' => false,
 						) );
 						if ( ! is_wp_error( $sub_categories ) ) {
 							$sub_categories = \Shihela\YukdigitalzKnowledgeBase\Templates::sort_categories( $sub_categories );

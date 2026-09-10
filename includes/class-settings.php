@@ -187,7 +187,7 @@ class Settings {
 						</div>
 						<div class="yukdigitalz-kb-brand-meta">
 							<span class="yukdigitalz-kb-brand-name">Yukdigitalz KB</span>
-							<span class="yukdigitalz-kb-brand-version">v1.0.0 Free</span>
+							<span class="yukdigitalz-kb-brand-version">v<?php echo esc_html( defined( 'YUKDIGITALZ_KB_VERSION' ) ? YUKDIGITALZ_KB_VERSION : '1.1.0' ); ?> Free</span>
 						</div>
 					</div>
 					<nav class="nav-tab-wrapper yukdigitalz-kb-nav-tabs">

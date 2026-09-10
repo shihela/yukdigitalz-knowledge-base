@@ -88,11 +88,8 @@ function initSidebarAccordion() {
 		});
 	});
 
-	const headers = querySelectorAllKB('.yukdigitalz-kb-sidebar-cat-header');
-	if (headers.length === 0) {
-		return;
-	}
-
+	const headerWraps = querySelectorAllKB('.yukdigitalz-kb-sidebar-cat-header-wrap, .yukdigitalz-kb-sidebar-subcat-header-wrap');
+	
 	// Load collapsed/expanded configuration
 	let accordionState = {};
 	try {
@@ -101,50 +98,160 @@ function initSidebarAccordion() {
 		accordionState = {};
 	}
 
-	headers.forEach(header => {
-		const targetId = header.getAttribute('data-target');
-		const content  = getElementByIdKB(targetId);
-		if (!content) {
+	if (headerWraps.length > 0) {
+		headerWraps.forEach(wrap => {
+			const targetId = wrap.getAttribute('data-target');
+			if (!targetId) return;
+			const content  = getElementByIdKB(targetId);
+			if (!content) return;
+
+			const toggleBtn = wrap.querySelector('.yukdigitalz-kb-sidebar-toggle-btn');
+
+			// Auto-expand if category holds active article, active category, or has stored state as expanded
+			const hasActiveChild = content.querySelector('.yukdigitalz-kb-active-article') !== null 
+				|| wrap.classList.contains('is-expanded') 
+				|| wrap.querySelector('.is-active') !== null;
+			
+			let shouldExpand = false;
+			if (hasActiveChild) {
+				// Active page section MUST always expand regardless of past localStorage
+				shouldExpand = true;
+			} else if (accordionState[targetId] !== undefined) {
+				shouldExpand = (accordionState[targetId] === true);
+			} else {
+				// Default behavior: top-level categories start expanded, subcategories start collapsed
+				shouldExpand = wrap.classList.contains('yukdigitalz-kb-sidebar-cat-header-wrap');
+			}
+
+			if (shouldExpand) {
+				content.style.maxHeight = 'none';
+				wrap.classList.add('is-expanded');
+				wrap.setAttribute('aria-expanded', 'true');
+				if (toggleBtn) {
+					toggleBtn.classList.add('is-expanded');
+					toggleBtn.setAttribute('aria-expanded', 'true');
+				}
+			} else {
+				content.style.maxHeight = '0px';
+				wrap.classList.remove('is-expanded');
+				wrap.setAttribute('aria-expanded', 'false');
+				if (toggleBtn) {
+					toggleBtn.classList.remove('is-expanded');
+					toggleBtn.setAttribute('aria-expanded', 'false');
+				}
+			}
+
+			function toggleItem(e) {
+				if (e) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+
+				const isExpanded = wrap.classList.contains('is-expanded');
+				if (isExpanded) {
+					content.style.maxHeight = '0px';
+					wrap.classList.remove('is-expanded');
+					wrap.setAttribute('aria-expanded', 'false');
+					if (toggleBtn) {
+						toggleBtn.classList.remove('is-expanded');
+						toggleBtn.setAttribute('aria-expanded', 'false');
+					}
+					accordionState[targetId] = false;
+				} else {
+					content.style.maxHeight = 'none';
+					wrap.classList.add('is-expanded');
+					wrap.setAttribute('aria-expanded', 'true');
+					if (toggleBtn) {
+						toggleBtn.classList.add('is-expanded');
+						toggleBtn.setAttribute('aria-expanded', 'true');
+					}
+					accordionState[targetId] = true;
+
+					// Expand parent accordion containers if nested inside another
+					let parentArticles = wrap.closest('.yukdigitalz-kb-sidebar-articles');
+					while (parentArticles) {
+						parentArticles.style.maxHeight = 'none';
+						const parentGroup = parentArticles.parentElement;
+						if (parentGroup) {
+							const parentWrap = parentGroup.querySelector(':scope > .yukdigitalz-kb-sidebar-cat-header-wrap, :scope > .yukdigitalz-kb-sidebar-subcat-header-wrap');
+							if (parentWrap) {
+								parentWrap.classList.add('is-expanded');
+								parentWrap.setAttribute('aria-expanded', 'true');
+								const pBtn = parentWrap.querySelector('.yukdigitalz-kb-sidebar-toggle-btn');
+								if (pBtn) {
+									pBtn.classList.add('is-expanded');
+									pBtn.setAttribute('aria-expanded', 'true');
+								}
+								const pTargetId = parentWrap.getAttribute('data-target');
+								if (pTargetId) {
+									accordionState[pTargetId] = true;
+								}
+							}
+						}
+						parentArticles = parentGroup ? parentGroup.closest('.yukdigitalz-kb-sidebar-articles') : null;
+					}
+				}
+				localStorage.setItem('yukdigitalz_kb_sidebar_state', JSON.stringify(accordionState));
+			}
+
+			wrap.addEventListener('click', toggleItem);
+			wrap.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					toggleItem(e);
+				}
+			});
+		});
+	} else {
+		// Fallback for legacy markup
+		const toggles = querySelectorAllKB('.yukdigitalz-kb-sidebar-toggle-btn, .yukdigitalz-kb-sidebar-cat-header');
+		if (toggles.length === 0) {
 			return;
 		}
 
-		// Auto-expand if category holds active article, or has stored state as expanded
-		const hasActiveChild = content.querySelector('.yukdigitalz-kb-active-article') !== null || header.classList.contains('is-expanded');
-		
-		if (accordionState[targetId] === true || (accordionState[targetId] === undefined && hasActiveChild)) {
-			content.style.maxHeight = 'none';
-			header.classList.add('is-expanded');
-			header.setAttribute('aria-expanded', 'true');
-		} else {
-			content.style.maxHeight = '0px';
-			header.classList.remove('is-expanded');
-			header.setAttribute('aria-expanded', 'false');
-		}
-
-		header.addEventListener('click', function(e) {
-			e.stopPropagation();
-			const isExpanded = header.classList.contains('is-expanded');
-			if (isExpanded) {
-				content.style.maxHeight = '0px';
-				header.classList.remove('is-expanded');
-				header.setAttribute('aria-expanded', 'false');
-				accordionState[targetId] = false;
-			} else {
-				content.style.maxHeight = 'none';
-				header.classList.add('is-expanded');
-				header.setAttribute('aria-expanded', 'true');
-				accordionState[targetId] = true;
-
-				// Expand parent accordion containers if nested inside another
-				let parentArticles = header.closest('.yukdigitalz-kb-sidebar-articles');
-				while (parentArticles) {
-					parentArticles.style.maxHeight = 'none';
-					parentArticles = parentArticles.parentElement ? parentArticles.parentElement.closest('.yukdigitalz-kb-sidebar-articles') : null;
-				}
+		toggles.forEach(toggle => {
+			const targetId = toggle.getAttribute('data-target');
+			const content  = getElementByIdKB(targetId);
+			if (!content) {
+				return;
 			}
-			localStorage.setItem('yukdigitalz_kb_sidebar_state', JSON.stringify(accordionState));
+
+			const hasActiveChild = content.querySelector('.yukdigitalz-kb-active-article') !== null || toggle.classList.contains('is-expanded');
+			
+			if (hasActiveChild || accordionState[targetId] === true || (accordionState[targetId] === undefined && hasActiveChild)) {
+				content.style.maxHeight = 'none';
+				toggle.classList.add('is-expanded');
+				toggle.setAttribute('aria-expanded', 'true');
+			} else {
+				content.style.maxHeight = '0px';
+				toggle.classList.remove('is-expanded');
+				toggle.setAttribute('aria-expanded', 'false');
+			}
+
+			toggle.addEventListener('click', function(e) {
+				e.stopPropagation();
+				const isExpanded = toggle.classList.contains('is-expanded');
+				if (isExpanded) {
+					content.style.maxHeight = '0px';
+					toggle.classList.remove('is-expanded');
+					toggle.setAttribute('aria-expanded', 'false');
+					accordionState[targetId] = false;
+				} else {
+					content.style.maxHeight = 'none';
+					toggle.classList.add('is-expanded');
+					toggle.setAttribute('aria-expanded', 'true');
+					accordionState[targetId] = true;
+
+					let parentArticles = toggle.closest('.yukdigitalz-kb-sidebar-articles');
+					while (parentArticles) {
+						parentArticles.style.maxHeight = 'none';
+						parentArticles = parentArticles.parentElement ? parentArticles.parentElement.closest('.yukdigitalz-kb-sidebar-articles') : null;
+					}
+				}
+				localStorage.setItem('yukdigitalz_kb_sidebar_state', JSON.stringify(accordionState));
+			});
 		});
-	});
+	}
 }
 
 /**
@@ -575,7 +682,7 @@ function initAIChat() {
 				appendChatMessage('assistant', reply);
 				conversationHistory.push({ role: 'assistant', content: reply });
 			} else {
-				const errorMsg = data.data && data.data.message ? data.data.message : yukdigitalz_kb_vars.strings.voting_error;
+				const errorMsg = data.data && data.data.message ? data.data.message : (yukdigitalz_kb_vars.strings.ai_error || yukdigitalz_kb_vars.strings.voting_error);
 				appendChatMessage('assistant', errorMsg, true);
 			}
 
@@ -588,7 +695,7 @@ function initAIChat() {
 		})
 		.catch(() => {
 			removeChatThinkingIndicator(thinkingId);
-			appendChatMessage('assistant', yukdigitalz_kb_vars.strings.voting_error, true);
+			appendChatMessage('assistant', yukdigitalz_kb_vars.strings.ai_error || yukdigitalz_kb_vars.strings.voting_error, true);
 			setTimeout(() => {
 				submitBtn.removeAttribute('disabled');
 				chatInput.removeAttribute('disabled');

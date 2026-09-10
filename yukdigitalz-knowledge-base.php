@@ -3,11 +3,13 @@
  * Plugin Name:       Yukdigitalz Knowledge Base
  * Plugin URI:        https://yukdigitalz.com/yukdigitalz-knowledge-base
  * Description:       An enterprise-grade, high-performance Knowledge Base and Documentation plugin for WordPress.
- * Version:           1.0.1
+ * Version:           1.1.0
+ * Requires at least: 5.8
+ * Requires PHP:      7.4
  * Author:            Shihela
  * Author URI:        https://yukdigitalz.com/shihela
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * License:           GPL-2.0-or-later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       yukdigitalz-knowledge-base
  * Domain Path:       /languages
  */
@@ -18,7 +20,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Define plugin constants
-define( 'YUKDIGITALZ_KB_VERSION', '1.0.1' );
+define( 'YUKDIGITALZ_KB_VERSION', '1.1.0' );
 define( 'YUKDIGITALZ_KB_PATH', plugin_dir_path( __FILE__ ) );
 define( 'YUKDIGITALZ_KB_URL', plugin_dir_url( __FILE__ ) );
 

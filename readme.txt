@@ -2,9 +2,9 @@
 Contributors: shihela
 Tags: knowledge base, documentation, wiki, docs, rag ai assistant
 Requires at least: 5.8
-Tested up to: 7.0
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,10 +43,18 @@ In addition to traditional Knowledge Base grids and navigation, Yukdigitalz Know
 Yes. Navigate to Settings > Yukdigitalz KB > Styling Options to customize primary, hover transition, and accent highlight colors via color pickers.
 
 = How does the AI Assistant retrieve information? =
-When a user asks a question, the plugin performs an internal `WP_Query` search on the custom post type `yukdigitalz_kb_doc`. The top 3 matching articles are injected directly into the Gemini model instructions as ground-truth context.
+When a user asks a question, the plugin performs an internal `WP_Query` search on the custom post type `yukdigitalz_kb_doc`. The top 3 matching articles are retrieved and supplied directly to your configured WordPress AI Client as ground-truth context.
 
 = Can I override templates in my child theme? =
 Yes. Copy any template file from the plugin's `templates/` folder and paste it into a `yukdigitalz-kb/` folder inside your active theme directory to override layouts safely.
+
+== Privacy & Third-Party AI Services ==
+
+This plugin supports optional AI chat assistance powered by the WordPress AI Client. When enabled:
+* The assistant retrieves relevant documentation snippets from published articles in your local WordPress database (`yukdigitalz_kb_doc`) to ground responses in facts.
+* Queries are processed via the provider configured in your WordPress AI Client (e.g., Google Gemini, OpenAI, or local models).
+* No personal identifying information (PII) or user credentials are transmitted or stored by this plugin.
+* Rate limiting utilizes one-way SHA-256 hashed IP addresses stored temporarily in WordPress Transients to prevent server resource abuse.
 
 == Screenshots ==
 
@@ -56,9 +64,14 @@ Yes. Copy any template file from the plugin's `templates/` folder and paste it i
 
 == Changelog ==
 
-= 1.0.1 =
+= 1.1.0 =
+* Added Smart Category Templates: Parent Category Product Showcase Directory Grid vs Child Category Documentation Hub.
+* Enhanced hierarchical permalink structure (domain/docs/{category}/{guide}) with seamless multi-level ancestor support.
+* Added automated 301 canonical & legacy redirect for backward compatibility.
+* Fixed sidebar accordion toggle so clicking anywhere on category text or chevron opens the sub-list instantly without page reload.
+* Fixed empty category exclusion on knowledge base portal by displaying newly created categories immediately.
+* Fixed 404 error on nested subcategory routing.
 * Fixed shadow mode on single article page.
-* Enhanced hierarchical URL architecture (domain/docs/{category}/{guide}) with automatic 301 legacy redirect.
 
 = 1.0.0 =
 * Initial release.

@@ -79,10 +79,32 @@ class Templates {
 	 */
 	public function load_taxonomy_template( $template ) {
 		if ( is_tax( 'yukdigitalz_kb_cat' ) ) {
-			$theme_file = locate_template( array( 'taxonomy-yukdigitalz_kb_cat.php' ) );
-			if ( ! $theme_file ) {
-				return YUKDIGITALZ_KB_PATH . 'templates/taxonomy-doc-cat.php';
+			$term = get_queried_object();
+			$has_children = false;
+			if ( ! empty( $term ) && isset( $term->term_id ) ) {
+				$children = get_terms( array(
+					'taxonomy'   => 'yukdigitalz_kb_cat',
+					'parent'     => $term->term_id,
+					'hide_empty' => false,
+					'fields'     => 'ids',
+				) );
+				$has_children = ! empty( $children ) && ! is_wp_error( $children );
 			}
+
+			// Allow themes to override parent or child category templates separately if desired
+			if ( $has_children ) {
+				$theme_file = locate_template( array( 'taxonomy-yukdigitalz_kb_cat-parent.php', 'taxonomy-yukdigitalz_kb_cat.php' ) );
+				if ( $theme_file ) {
+					return $theme_file;
+				}
+			} else {
+				$theme_file = locate_template( array( 'taxonomy-yukdigitalz_kb_cat-child.php', 'taxonomy-yukdigitalz_kb_cat.php' ) );
+				if ( $theme_file ) {
+					return $theme_file;
+				}
+			}
+
+			return YUKDIGITALZ_KB_PATH . 'templates/taxonomy-doc-cat.php';
 		}
 		return $template;
 	}
@@ -94,7 +116,7 @@ class Templates {
 	 * @param array       $args Arguments to pass to the header template.
 	 */
 	public static function get_header( $name = null, $args = array() ) {
-		// Jika tema mendukung FSE (Block Theme) atau memiliki file header.php fisik
+		// If the theme supports FSE (Block Theme) or has a physical header.php file
 		if ( function_exists( 'wp_is_block_theme' ) && call_user_func( 'wp_is_block_theme' ) ) {
 			get_header( $name, $args );
 		} elseif ( ! empty( locate_template( 'header.php' ) ) ) {
@@ -121,7 +143,7 @@ class Templates {
 	 * @param array       $args Arguments to pass to the footer template.
 	 */
 	public static function get_footer( $name = null, $args = array() ) {
-		// Jika tema mendukung FSE (Block Theme) atau memiliki file footer.php fisik
+		// If the theme supports FSE (Block Theme) or has a physical footer.php file
 		if ( function_exists( 'wp_is_block_theme' ) && call_user_func( 'wp_is_block_theme' ) ) {
 			get_footer( $name, $args );
 		} elseif ( ! empty( locate_template( 'footer.php' ) ) ) {
@@ -205,6 +227,8 @@ class Templates {
 
 	/**
 	 * Renders hierarchical sidebar category navigation (Parent Categories -> Child Categories -> Articles).
+	 * Uses clean text links for category and product names with dedicated unstyled toggle buttons
+	 * to prevent conflicts with theme button CSS styles.
 	 *
 	 * @param int $current_post_id Active post ID (if on single doc page).
 	 * @param int $current_term_id Active term ID (if on taxonomy page).
@@ -213,7 +237,7 @@ class Templates {
 		$top_categories = get_terms( array(
 			'taxonomy'   => 'yukdigitalz_kb_cat',
 			'parent'     => 0,
-			'hide_empty' => true,
+			'hide_empty' => false,
 		) );
 		$top_categories = self::sort_categories( $top_categories );
 
@@ -227,7 +251,7 @@ class Templates {
 			$child_categories = get_terms( array(
 				'taxonomy'   => 'yukdigitalz_kb_cat',
 				'parent'     => $top_cat->term_id,
-				'hide_empty' => true,
+				'hide_empty' => false,
 			) );
 			$child_categories = self::sort_categories( $child_categories );
 
@@ -247,17 +271,21 @@ class Templates {
 
 			?>
 			<div class="yukdigitalz-kb-sidebar-cat-group">
-				<button class="yukdigitalz-kb-sidebar-cat-header <?php echo ( $is_top_active || $has_active_child ) ? 'is-expanded' : ''; ?>" data-target="<?php echo esc_attr( $group_id ); ?>" aria-expanded="<?php echo ( $is_top_active || $has_active_child ) ? 'true' : 'false'; ?>" aria-controls="<?php echo esc_attr( $group_id ); ?>">
-					<span><?php echo esc_html( $top_cat->name ); ?></span>
-					<span class="yukdigitalz-kb-chevron-icon" aria-hidden="true">
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+				<div class="yukdigitalz-kb-sidebar-cat-header-wrap <?php echo ( $is_top_active || $has_active_child ) ? 'is-expanded' : ''; ?>" data-target="<?php echo esc_attr( $group_id ); ?>" role="button" tabindex="0" aria-expanded="<?php echo ( $is_top_active || $has_active_child ) ? 'true' : 'false'; ?>" aria-controls="<?php echo esc_attr( $group_id ); ?>">
+					<span class="yukdigitalz-kb-sidebar-cat-link <?php echo $is_top_active ? 'is-active' : ''; ?>">
+						<?php echo esc_html( $top_cat->name ); ?>
 					</span>
-				</button>
+					<span class="yukdigitalz-kb-sidebar-toggle-btn <?php echo ( $is_top_active || $has_active_child ) ? 'is-expanded' : ''; ?>" aria-hidden="true">
+						<span class="yukdigitalz-kb-chevron-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+						</span>
+					</span>
+				</div>
 				
 				<div id="<?php echo esc_attr( $group_id ); ?>" class="yukdigitalz-kb-sidebar-articles" role="region" aria-label="<?php echo esc_attr( $top_cat->name ); ?>">
 					<?php
 					if ( ! empty( $child_categories ) && ! is_wp_error( $child_categories ) ) {
-						// Render Child Categories under this Parent Category
+						// Render Child Categories (Products/Plugins) under this Parent Category
 						foreach ( $child_categories as $child_cat ) {
 							$sub_group_id = 'subcat-group-' . $child_cat->term_id;
 							$is_child_active = ( $child_cat->term_id === $current_term_id );
@@ -289,12 +317,16 @@ class Templates {
 							}
 							?>
 							<div class="yukdigitalz-kb-sidebar-subcat-group">
-								<button class="yukdigitalz-kb-sidebar-cat-header yukdigitalz-kb-sidebar-subcat-header <?php echo ( $is_child_active || $child_has_active_post ) ? 'is-expanded' : ''; ?>" data-target="<?php echo esc_attr( $sub_group_id ); ?>" aria-expanded="<?php echo ( $is_child_active || $child_has_active_post ) ? 'true' : 'false'; ?>" aria-controls="<?php echo esc_attr( $sub_group_id ); ?>">
-									<span><?php echo esc_html( $child_cat->name ); ?></span>
-									<span class="yukdigitalz-kb-chevron-icon" aria-hidden="true">
-										<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+								<div class="yukdigitalz-kb-sidebar-subcat-header-wrap <?php echo ( $is_child_active || $child_has_active_post ) ? 'is-expanded' : ''; ?>" data-target="<?php echo esc_attr( $sub_group_id ); ?>" role="button" tabindex="0" aria-expanded="<?php echo ( $is_child_active || $child_has_active_post ) ? 'true' : 'false'; ?>" aria-controls="<?php echo esc_attr( $sub_group_id ); ?>">
+									<span class="yukdigitalz-kb-sidebar-subcat-link <?php echo $is_child_active ? 'is-active' : ''; ?>">
+										<?php echo esc_html( $child_cat->name ); ?>
 									</span>
-								</button>
+									<span class="yukdigitalz-kb-sidebar-toggle-btn <?php echo ( $is_child_active || $child_has_active_post ) ? 'is-expanded' : ''; ?>" aria-hidden="true">
+										<span class="yukdigitalz-kb-chevron-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+										</span>
+									</span>
+								</div>
 								<ul id="<?php echo esc_attr( $sub_group_id ); ?>" class="yukdigitalz-kb-sidebar-articles yukdigitalz-kb-sidebar-subcat-articles" role="region" aria-label="<?php echo esc_attr( $child_cat->name ); ?>">
 									<?php if ( $child_docs_query->have_posts() ) : ?>
 										<?php while ( $child_docs_query->have_posts() ) : $child_docs_query->the_post(); ?>
@@ -307,7 +339,7 @@ class Templates {
 										<?php endwhile; ?>
 										<?php wp_reset_postdata(); ?>
 									<?php else : ?>
-										<li><?php esc_html_e( 'No articles.', 'yukdigitalz-knowledge-base' ); ?></li>
+										<li class="yukdigitalz-kb-sidebar-no-docs"><?php esc_html_e( 'No articles.', 'yukdigitalz-knowledge-base' ); ?></li>
 									<?php endif; ?>
 								</ul>
 							</div>
@@ -372,7 +404,7 @@ class Templates {
 								<?php endwhile; ?>
 								<?php wp_reset_postdata(); ?>
 							<?php else : ?>
-								<li><?php esc_html_e( 'No articles.', 'yukdigitalz-knowledge-base' ); ?></li>
+								<li class="yukdigitalz-kb-sidebar-no-docs"><?php esc_html_e( 'No articles.', 'yukdigitalz-knowledge-base' ); ?></li>
 							<?php endif; ?>
 						</ul>
 						<?php

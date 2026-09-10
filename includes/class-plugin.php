@@ -37,6 +37,9 @@ class Plugin {
 	 * Runs the components.
 	 */
 	public function run() {
+		// Load plugin internationalization
+		add_action( 'init', array( $this, 'load_textdomain' ) );
+
 		// Run components initialization
 		$this->cpt->init();
 		$this->assets->init();
@@ -44,5 +47,16 @@ class Plugin {
 		$this->ajax->init();
 		$this->shortcode->init();
 		$this->templates->init();
+	}
+
+	/**
+	 * Loads plugin textdomain for translations.
+	 */
+	public function load_textdomain() {
+		load_plugin_textdomain(
+			'yukdigitalz-knowledge-base',
+			false,
+			dirname( plugin_basename( YUKDIGITALZ_KB_PATH . 'yukdigitalz-knowledge-base.php' ) ) . '/languages'
+		);
 	}
 }

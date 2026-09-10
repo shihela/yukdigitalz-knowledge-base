@@ -284,14 +284,17 @@ class CPT {
 			if ( ! $post ) {
 				$candidate_term = get_term_by( 'slug', $post_slug, 'yukdigitalz_kb_cat' );
 				if ( $candidate_term && ! is_wp_error( $candidate_term ) ) {
-					// Route as subcategory archive
-					$query_vars['yukdigitalz_kb_cat'] = $cat_path . '/' . $post_slug;
+					// Route as subcategory archive using the actual term slug
+					$query_vars['yukdigitalz_kb_cat'] = $candidate_term->slug;
 					unset( $query_vars['yukdigitalz_kb_doc'] );
+					unset( $query_vars['name'] );
+					unset( $query_vars['post_type'] );
 				}
 			} else {
 				// Explicitly assign post_type and post_name to render single template reliably
 				$query_vars['post_type'] = 'yukdigitalz_kb_doc';
 				$query_vars['name']      = $post_slug;
+				unset( $query_vars['yukdigitalz_kb_cat'] );
 			}
 		}
 

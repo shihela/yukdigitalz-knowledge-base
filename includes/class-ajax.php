@@ -172,7 +172,7 @@ class Ajax {
 				} else {
 					$limit_data['count']++;
 					if ( $limit_data['count'] > $max_queries ) {
-						wp_send_json_error( array( 'message' => esc_html__( 'Batas kuota chat tercapai. Anda telah melebihi batas maksimum pertanyaan per jam. Silakan coba lagi nanti.', 'yukdigitalz-knowledge-base' ) ) );
+						wp_send_json_error( array( 'message' => esc_html__( 'Chat quota reached. You have exceeded the maximum questions allowed per hour. Please try again later.', 'yukdigitalz-knowledge-base' ) ) );
 					}
 					set_transient( $limit_key, $limit_data, $remaining );
 				}
@@ -190,11 +190,11 @@ class Ajax {
 		$context      = '';
 
 		if ( $search_query->have_posts() ) {
-			$context .= "Berikut adalah beberapa artikel dokumentasi yang relevan dari basis pengetahuan kami:\n\n";
+			$context .= "Here are relevant documentation articles from our knowledge base:\n\n";
 			while ( $search_query->have_posts() ) {
 				$search_query->the_post();
-				$context .= "Judul: " . get_the_title() . "\n";
-				$context .= "Isi:\n" . wp_strip_all_tags( wp_trim_words( get_the_content(), 250 ) ) . "\n\n";
+				$context .= "Title: " . get_the_title() . "\n";
+				$context .= "Content:\n" . wp_strip_all_tags( wp_trim_words( get_the_content(), 250 ) ) . "\n\n";
 			}
 		}
 
@@ -202,18 +202,18 @@ class Ajax {
 		$context = apply_filters( 'yukdigitalz_kb_ai_chat_context', $context, $message, $chat_history );
 
 		// Compile the System prompt instructions
-		$bot_name      = __( 'Asisten AI Yukdigitalz KB', 'yukdigitalz-knowledge-base' );
+		$bot_name      = __( 'Yukdigitalz KB AI Assistant', 'yukdigitalz-knowledge-base' );
 		$site_name     = get_bloginfo( 'name' );
-		$system_prompt = "Anda adalah asisten AI ramah dan profesional bernama '{$bot_name}' untuk situs '{$site_name}'.\n";
-		$system_prompt .= "Tugas utama Anda adalah menjawab pertanyaan pengunjung menggunakan dokumentasi/knowledge base yang disediakan di bawah ini.\n";
-		$system_prompt .= "Pedoman Ketat:\n";
-		$system_prompt .= "1. Jawablah pertanyaan pengunjung HANYA berdasarkan dokumentasi yang diberikan di bawah. Jangan membuat asumsi di luar konteks.\n";
-		$system_prompt .= "2. Jika jawaban tidak ada dalam dokumentasi, katakan secara jujur bahwa Anda tidak tahu atau tidak dapat menemukannya di dokumentasi kami.\n";
-		$system_prompt .= "3. Jawablah menggunakan bahasa yang sama dengan yang digunakan pengunjung.\n";
-		$system_prompt .= "4. Jaga agar jawaban tetap ringkas, terstruktur, dan jelas. Gunakan bullet points atau daftar jika membantu penjelasan.\n\n";
+		$system_prompt = "You are a friendly and professional AI assistant named '{$bot_name}' for '{$site_name}'.\n";
+		$system_prompt .= "Your primary task is to answer visitor questions using the documentation/knowledge base provided below.\n";
+		$system_prompt .= "Strict Guidelines:\n";
+		$system_prompt .= "1. Answer visitor questions ONLY based on the documentation provided below. Do not make assumptions outside this context.\n";
+		$system_prompt .= "2. If the answer is not present in the documentation, honestly state that you do not know or cannot find it in our documentation.\n";
+		$system_prompt .= "3. Answer using the same language used by the visitor.\n";
+		$system_prompt .= "4. Keep your answers concise, structured, and clear. Use bullet points or lists where appropriate.\n\n";
 
 		if ( ! empty( $context ) ) {
-			$system_prompt .= "Konteks Dokumentasi:\n{$context}\n";
+			$system_prompt .= "Documentation Context:\n{$context}\n";
 		}
 
 		$ai_response = '';

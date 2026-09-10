@@ -82,6 +82,7 @@ class Assets {
 					'voting_thanks' => esc_html__( 'Thank you for your feedback!', 'yukdigitalz-knowledge-base' ),
 					'voting_error'  => esc_html__( 'Could not register feedback. Please try again.', 'yukdigitalz-knowledge-base' ),
 					'search_no_res' => esc_html__( 'No documentation found matching your query.', 'yukdigitalz-knowledge-base' ),
+					'ai_error'      => esc_html__( 'Unable to process your request. Please try again.', 'yukdigitalz-knowledge-base' ),
 				)
 			)
 		);
