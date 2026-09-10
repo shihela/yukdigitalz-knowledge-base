@@ -53,8 +53,10 @@ register_activation_hook( __FILE__, function() {
 	// Trigger CPT registration to flush rewrite rules
 	if ( class_exists( 'Shihela\YukdigitalzKnowledgeBase\CPT' ) ) {
 		$cpt = new Shihela\YukdigitalzKnowledgeBase\CPT();
+		$cpt->register_rewrite_tags();
 		$cpt->register_post_type();
 		$cpt->register_taxonomy();
+		$cpt->add_custom_rewrite_rules();
 	}
 	flush_rewrite_rules();
 } );
@@ -64,6 +66,25 @@ register_activation_hook( __FILE__, function() {
  */
 register_deactivation_hook( __FILE__, function() {
 	flush_rewrite_rules();
+} );
+
+/**
+ * One-time version migration check and rewrite rules flush on updates.
+ * Conforms to WordPress.org performance guidelines (never flushes on normal page load).
+ */
+add_action( 'admin_init', function() {
+	$installed_version = get_option( 'yukdigitalz_kb_version' );
+	if ( YUKDIGITALZ_KB_VERSION !== $installed_version ) {
+		if ( class_exists( 'Shihela\YukdigitalzKnowledgeBase\CPT' ) ) {
+			$cpt = new Shihela\YukdigitalzKnowledgeBase\CPT();
+			$cpt->register_rewrite_tags();
+			$cpt->register_post_type();
+			$cpt->register_taxonomy();
+			$cpt->add_custom_rewrite_rules();
+		}
+		flush_rewrite_rules( false );
+		update_option( 'yukdigitalz_kb_version', YUKDIGITALZ_KB_VERSION );
+	}
 } );
 
 /**

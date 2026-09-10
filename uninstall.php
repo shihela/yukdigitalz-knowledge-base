@@ -34,6 +34,7 @@ $yukdigitalz_kb_options = array(
 	'yukdigitalz_kb_archive_posts_per_page',
 	'yukdigitalz_kb_search_logs',
 	'yukdigitalz_kb_category_order',
+	'yukdigitalz_kb_version',
 );
 
 foreach ( $yukdigitalz_kb_options as $yukdigitalz_kb_option ) {

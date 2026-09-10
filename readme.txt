@@ -57,7 +57,8 @@ Yes. Copy any template file from the plugin's `templates/` folder and paste it i
 == Changelog ==
 
 = 1.0.1 =
-* Fixed shadow mode on single article page
+* Fixed shadow mode on single article page.
+* Enhanced hierarchical URL architecture (domain/docs/{category}/{guide}) with automatic 301 legacy redirect.
 
 = 1.0.0 =
 * Initial release.

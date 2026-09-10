@@ -260,14 +260,14 @@ class Settings {
 							<th scope="row"><label for="yukdigitalz_kb_slug"><?php esc_html_e( 'Documentation Base Slug', 'yukdigitalz-knowledge-base' ); ?></label></th>
 							<td>
 								<input name="yukdigitalz_kb_slug" type="text" id="yukdigitalz_kb_slug" value="<?php echo esc_attr( get_option( 'yukdigitalz_kb_slug', 'docs' ) ); ?>" class="regular-text" />
-								<p class="description"><?php esc_html_e( 'Base URL structure for documentation archives. e.g. yoursite.com/docs/', 'yukdigitalz-knowledge-base' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Unified base URL structure for documentation portal, categories, and articles. e.g. yoursite.com/docs/ (Categories: yoursite.com/docs/my-plugin/, Articles: yoursite.com/docs/my-plugin/guide/)', 'yukdigitalz-knowledge-base' ); ?></p>
 							</td>
 						</tr>
 						<tr>
-							<th scope="row"><label for="yukdigitalz_kb_cat_slug"><?php esc_html_e( 'Category Base Slug', 'yukdigitalz-knowledge-base' ); ?></label></th>
+							<th scope="row"><label for="yukdigitalz_kb_cat_slug"><?php esc_html_e( 'Legacy Category Slug (Redirect)', 'yukdigitalz-knowledge-base' ); ?></label></th>
 							<td>
 								<input name="yukdigitalz_kb_cat_slug" type="text" id="yukdigitalz_kb_cat_slug" value="<?php echo esc_attr( get_option( 'yukdigitalz_kb_cat_slug', 'doc-category' ) ); ?>" class="regular-text" />
-								<p class="description"><?php esc_html_e( 'Base URL structure for documentation categories. e.g. yoursite.com/doc-category/install/', 'yukdigitalz-knowledge-base' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Legacy category URL slug used for automatic 301 redirection. Categories are now cleanly unified directly under the documentation base slug.', 'yukdigitalz-knowledge-base' ); ?></p>
 							</td>
 						</tr>
 						<tr>
