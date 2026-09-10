@@ -862,7 +862,10 @@ svg.yukdigitalz-kb-mobile-chevron {
 }
 
 .yukdigitalz-kb-sidebar-articles li a {
-	display: block !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	gap: 8px !important;
 	font-size: 0.86rem !important;
 	color: #64748b !important;
 	text-decoration: none !important;
@@ -1287,6 +1290,88 @@ svg.yukdigitalz-kb-mobile-chevron {
 .yukdigitalz-kb-article-body :is(img, video, iframe, object, embed) {
 	max-width: 100% !important;
 	height: auto !important;
+}
+
+/* ==========================================
+   VIDEO WALKTHROUGH EMBED PLAYER
+   ========================================== */
+.yukdigitalz-kb-video-container {
+	margin: 0 0 32px 0 !important;
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+.yukdigitalz-kb-video-wrapper {
+	position: relative !important;
+	width: 100% !important;
+	padding-bottom: 56.25% !important; /* 16:9 Aspect Ratio */
+	height: 0 !important;
+	overflow: hidden !important;
+	border-radius: 12px !important;
+	border: 1px solid var(--yukdigitalz-kb-border, #e2e8f0) !important;
+	background: #0f172a !important;
+	box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.08) !important;
+}
+
+.yukdigitalz-kb-video-wrapper iframe,
+.yukdigitalz-kb-video-wrapper object,
+.yukdigitalz-kb-video-wrapper embed,
+.yukdigitalz-kb-video-wrapper video {
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	border: none !important;
+	border-radius: 12px !important;
+}
+
+/* Video Guide Badge */
+.yukdigitalz-kb-video-badge {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 4px !important;
+	margin-left: auto !important;
+	padding: 2px 7px !important;
+	font-size: 0.72rem !important;
+	font-weight: 600 !important;
+	border-radius: 4px !important;
+	background: rgba(37, 99, 235, 0.08) !important;
+	color: var(--yukdigitalz-kb-primary, #2563eb) !important;
+	line-height: 1 !important;
+	flex-shrink: 0 !important;
+	letter-spacing: 0.02em !important;
+	transition: all 0.2s ease !important;
+}
+
+.yukdigitalz-kb-sidebar-articles li a:hover .yukdigitalz-kb-video-badge,
+.yukdigitalz-kb-category-docs li a:hover .yukdigitalz-kb-video-badge,
+.yukdigitalz-kb-product-recent-list li a:hover .yukdigitalz-kb-video-badge {
+	background: var(--yukdigitalz-kb-primary, #2563eb) !important;
+	color: #ffffff !important;
+}
+
+.yukdigitalz-kb-video-badge svg,
+.yukdigitalz-kb-video-badge svg.feather {
+	width: 10px !important;
+	height: 10px !important;
+	fill: currentColor !important;
+	stroke: currentColor !important;
+	stroke-width: 1.5 !important;
+	flex-shrink: 0 !important;
+}
+
+.yukdigitalz-kb-sidebar-article-title {
+	flex: 1 !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	white-space: nowrap !important;
+}
+
+.yukdigitalz-kb-doc-title-text {
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	white-space: nowrap !important;
 }
 
 /* Table of Contents Inside Article */

@@ -4,7 +4,7 @@ Tags: knowledge base, documentation, wiki, docs, rag ai assistant
 Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,7 @@ In addition to traditional Knowledge Base grids and navigation, Yukdigitalz Know
 * **Collapsible Accordion Sidebar**: Interactive, accessible list of categories and documents in the sidebar that preserves expansion states.
 * **Automatic Table of Contents (TOC)**: Dynamically parses `h2` and `h3` tags inside article content to render a floating index widget.
 * **Helpfulness Feedback Widget**: AJAX-based user voting ("Was this article helpful?") with custom cookie session locks to prevent spam ratings.
+* **Video Tutorial Walkthroughs**: Dedicated support for YouTube, Vimeo, and oEmbed video guides rendered in a responsive 16:9 player with visual video badges across navigation listings.
 * **Breadcrumbs Navigation**: Automated microdata-ready hierarchical path links at the top of individual documentation pages.
 * **Enterprise Customizer Settings**: A premium, tabbed dashboard options page allowing you to configure custom base slugs, primary hover colors, rating widgets, TOCs, Q&A Comments toggle, and rate limit parameters.
 
@@ -48,21 +49,25 @@ When a user asks a question, the plugin performs an internal `WP_Query` search o
 = Can I override templates in my child theme? =
 Yes. Copy any template file from the plugin's `templates/` folder and paste it into a `yukdigitalz-kb/` folder inside your active theme directory to override layouts safely.
 
-== Privacy & Third-Party AI Services ==
+== Privacy & Third-Party Services ==
 
-This plugin supports optional AI chat assistance powered by the WordPress AI Client. When enabled:
-* The assistant retrieves relevant documentation snippets from published articles in your local WordPress database (`yukdigitalz_kb_doc`) to ground responses in facts.
-* Queries are processed via the provider configured in your WordPress AI Client (e.g., Google Gemini, OpenAI, or local models).
-* No personal identifying information (PII) or user credentials are transmitted or stored by this plugin.
-* Rate limiting utilizes one-way SHA-256 hashed IP addresses stored temporarily in WordPress Transients to prevent server resource abuse.
+This plugin supports optional third-party integrations:
+* **AI Chat Assistant**: Powered by the WordPress AI Client. Queries retrieve local documentation snippets to ground responses in facts and are processed by your chosen model (e.g. Gemini, OpenAI, or local models). No personal identifying information (PII) or user credentials are stored. Rate limiting uses one-way SHA-256 hashed IP addresses in WordPress Transients.
+* **Embedded Video Walkthroughs**: When an article includes an optional video guide (such as YouTube or Vimeo), playing the video connects directly to the respective third-party provider's servers in accordance with their privacy policies.
 
 == Screenshots ==
 
 1. The premium main card grid portal view.
-2. Contextual single article template view.
+2. Contextual single article template view with 16:9 video player.
 3. Slide-out RAG AI Chat Assistant drawer interface.
 
 == Changelog ==
+
+= 1.2.0 =
+* Added Video Tutorial Documentation feature: dedicated Video Walkthrough meta box for YouTube, Vimeo, and WordPress oEmbed links.
+* Added responsive 16:9 enterprise-grade video player container above article content.
+* Added visual Video Guide indicator badges in the sidebar accordion, category archive cards, and portal grid.
+* Added third-party embedded video privacy disclosure in compliance with WordPress.org guidelines.
 
 = 1.1.0 =
 * Added Smart Category Templates: Parent Category Product Showcase Directory Grid vs Child Category Documentation Hub.

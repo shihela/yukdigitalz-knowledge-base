@@ -143,11 +143,18 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 							<?php if ( $yukdigitalz_kb_recent_docs_query->have_posts() ) : ?>
 								<ul class="yukdigitalz-kb-product-recent-list">
 									<?php while ( $yukdigitalz_kb_recent_docs_query->have_posts() ) : $yukdigitalz_kb_recent_docs_query->the_post(); ?>
+										<?php $yukdigitalz_kb_has_video = ! empty( get_post_meta( get_the_ID(), '_yukdigitalz_kb_video_url', true ) ); ?>
 										<li>
 											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
 											<a href="<?php echo esc_url( get_permalink() ); ?>">
 												<?php echo esc_html( get_the_title() ); ?>
 											</a>
+											<?php if ( $yukdigitalz_kb_has_video ) : ?>
+												<span class="yukdigitalz-kb-video-badge" title="<?php esc_attr_e( 'Video Guide Included', 'yukdigitalz-knowledge-base' ); ?>">
+													<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+													<span><?php esc_html_e( 'Video', 'yukdigitalz-knowledge-base' ); ?></span>
+												</span>
+											<?php endif; ?>
 										</li>
 									<?php endwhile; wp_reset_postdata(); ?>
 								</ul>
@@ -184,12 +191,21 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 					<h2 style="font-size: 1.3rem; margin-bottom: 16px; font-weight: 700;"><?php esc_html_e( 'General Guides', 'yukdigitalz-knowledge-base' ); ?></h2>
 					<div class="yukdigitalz-kb-category-archive-list" style="display: flex; flex-direction: column; gap: 16px;">
 						<?php while ( $yukdigitalz_kb_parent_direct_query->have_posts() ) : $yukdigitalz_kb_parent_direct_query->the_post(); ?>
+							<?php $yukdigitalz_kb_has_video = ! empty( get_post_meta( get_the_ID(), '_yukdigitalz_kb_video_url', true ) ); ?>
 							<article class="yukdigitalz-kb-archive-item-card" style="padding: 20px; border: 1px solid var(--yukdigitalz-kb-border); border-radius: var(--yukdigitalz-kb-radius-sm); background: var(--yukdigitalz-kb-card-bg);">
-								<h3 style="margin: 0 0 8px 0; font-size: 1.15rem;">
-									<a href="<?php echo esc_url( get_permalink() ); ?>" style="color: var(--yukdigitalz-kb-text-main); text-decoration: none;">
-										<?php echo esc_html( get_the_title() ); ?>
-									</a>
-								</h3>
+								<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px;">
+									<h3 style="margin: 0; font-size: 1.15rem;">
+										<a href="<?php echo esc_url( get_permalink() ); ?>" style="color: var(--yukdigitalz-kb-text-main); text-decoration: none;">
+											<?php echo esc_html( get_the_title() ); ?>
+										</a>
+									</h3>
+									<?php if ( $yukdigitalz_kb_has_video ) : ?>
+										<span class="yukdigitalz-kb-video-badge" title="<?php esc_attr_e( 'Video Guide Included', 'yukdigitalz-knowledge-base' ); ?>">
+											<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+											<span><?php esc_html_e( 'Video', 'yukdigitalz-knowledge-base' ); ?></span>
+										</span>
+									<?php endif; ?>
+								</div>
 								<p style="margin: 0 0 12px 0; color: var(--yukdigitalz-kb-text-muted); font-size: 0.9rem;">
 									<?php echo esc_html( wp_trim_words( get_the_excerpt(), 20 ) ); ?>
 								</p>
@@ -206,12 +222,21 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 			<!-- VIEW B: CHILD / PRODUCT DOCUMENTATION HUB (List of Specific Guides) -->
 			<div class="yukdigitalz-kb-category-archive-list" style="display: flex; flex-direction: column; gap: 20px;">
 				<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+					<?php $yukdigitalz_kb_has_video = ! empty( get_post_meta( get_the_ID(), '_yukdigitalz_kb_video_url', true ) ); ?>
 					<article class="yukdigitalz-kb-archive-item-card" style="padding: 24px; border: 1px solid var(--yukdigitalz-kb-border); border-radius: var(--yukdigitalz-kb-radius-sm); transition: var(--yukdigitalz-kb-transition-smooth); background: var(--yukdigitalz-kb-card-bg);">
-						<h2 class="yukdigitalz-kb-archive-item-title" style="margin: 0 0 10px 0; font-size: 1.25rem; font-weight: 700;">
-							<a href="<?php echo esc_url( get_permalink() ); ?>" style="color: var(--yukdigitalz-kb-text-main); text-decoration: none; transition: var(--yukdigitalz-kb-transition-smooth);">
-								<?php echo esc_html( get_the_title() ); ?>
-							</a>
-						</h2>
+						<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px;">
+							<h2 class="yukdigitalz-kb-archive-item-title" style="margin: 0; font-size: 1.25rem; font-weight: 700;">
+								<a href="<?php echo esc_url( get_permalink() ); ?>" style="color: var(--yukdigitalz-kb-text-main); text-decoration: none; transition: var(--yukdigitalz-kb-transition-smooth);">
+									<?php echo esc_html( get_the_title() ); ?>
+								</a>
+							</h2>
+							<?php if ( $yukdigitalz_kb_has_video ) : ?>
+								<span class="yukdigitalz-kb-video-badge" title="<?php esc_attr_e( 'Video Guide Included', 'yukdigitalz-knowledge-base' ); ?>">
+									<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+									<span><?php esc_html_e( 'Video', 'yukdigitalz-knowledge-base' ); ?></span>
+								</span>
+							<?php endif; ?>
+						</div>
 						<p style="margin: 0 0 16px 0; color: var(--yukdigitalz-kb-text-muted); font-size: 0.95rem; line-height: 1.6;">
 							<?php echo esc_html( wp_trim_words( get_the_excerpt(), 25 ) ); ?>
 						</p>

@@ -22,6 +22,8 @@ class CPT {
 		add_filter( 'post_type_link', array( $this, 'filter_post_type_link' ), 10, 2 );
 		add_filter( 'request', array( $this, 'resolve_request_collision' ) );
 		add_action( 'template_redirect', array( $this, 'handle_legacy_redirects' ) );
+		add_action( 'add_meta_boxes', array( $this, 'register_meta_boxes' ) );
+		add_action( 'save_post_yukdigitalz_kb_doc', array( $this, 'save_meta_boxes' ) );
 	}
 
 	/**
@@ -376,6 +378,72 @@ class CPT {
 						exit;
 					}
 				}
+			}
+		}
+	}
+
+	/**
+	 * Registers custom meta boxes for documentation articles.
+	 */
+	public function register_meta_boxes() {
+		add_meta_box(
+			'yukdigitalz_kb_video_meta',
+			__( 'Video Walkthrough', 'yukdigitalz-knowledge-base' ),
+			array( $this, 'render_video_meta_box' ),
+			'yukdigitalz_kb_doc',
+			'normal',
+			'high'
+		);
+	}
+
+	/**
+	 * Renders the Video Walkthrough meta box.
+	 *
+	 * @param \WP_Post $post Current post object.
+	 */
+	public function render_video_meta_box( $post ) {
+		wp_nonce_field( 'yukdigitalz_kb_video_meta_action', 'yukdigitalz_kb_video_meta_nonce' );
+		$video_url = get_post_meta( $post->ID, '_yukdigitalz_kb_video_url', true );
+		?>
+		<p>
+			<label for="yukdigitalz_kb_video_url" style="display: block; font-weight: 600; margin-bottom: 6px;">
+				<?php esc_html_e( 'Video Walkthrough URL (YouTube, Vimeo, or oEmbed video link):', 'yukdigitalz-knowledge-base' ); ?>
+			</label>
+			<input type="url" id="yukdigitalz_kb_video_url" name="yukdigitalz_kb_video_url" value="<?php echo esc_url( $video_url ); ?>" class="widefat" placeholder="https://www.youtube.com/watch?v=... or https://vimeo.com/..." style="padding: 6px 10px; border-radius: 4px;" />
+		</p>
+		<p class="description" style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">
+			<?php esc_html_e( 'Provide an optional video guide URL. When configured, an enterprise-grade 16:9 video player will be rendered at the top of the article, and a video guide badge will be displayed in listings.', 'yukdigitalz-knowledge-base' ); ?>
+		</p>
+		<?php
+	}
+
+	/**
+	 * Saves Video Walkthrough meta box data.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public function save_meta_boxes( $post_id ) {
+		// Nonce check
+		if ( ! isset( $_POST['yukdigitalz_kb_video_meta_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['yukdigitalz_kb_video_meta_nonce'] ), 'yukdigitalz_kb_video_meta_action' ) ) {
+			return;
+		}
+
+		// Avoid autosave
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// Permission check
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['yukdigitalz_kb_video_url'] ) ) {
+			$video_url = esc_url_raw( trim( wp_unslash( $_POST['yukdigitalz_kb_video_url'] ) ) );
+			if ( ! empty( $video_url ) ) {
+				update_post_meta( $post_id, '_yukdigitalz_kb_video_url', $video_url );
+			} else {
+				delete_post_meta( $post_id, '_yukdigitalz_kb_video_url' );
 			}
 		}
 	}
