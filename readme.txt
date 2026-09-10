@@ -28,7 +28,8 @@ In addition to traditional Knowledge Base grids and navigation, Yukdigitalz Know
 * **Helpfulness Feedback Widget**: AJAX-based user voting ("Was this article helpful?") with custom cookie session locks to prevent spam ratings.
 * **Video Tutorial Walkthroughs**: Dedicated support for YouTube, Vimeo, and oEmbed video guides rendered in a responsive 16:9 player with visual video badges across navigation listings.
 * **Breadcrumbs Navigation**: Automated microdata-ready hierarchical path links at the top of individual documentation pages.
-* **Enterprise Customizer Settings**: A premium, tabbed dashboard options page allowing you to configure custom base slugs, primary hover colors, rating widgets, TOCs, Q&A Comments toggle, and rate limit parameters.
+* **Sequential Article Navigation**: Accessible Previous and Next topic navigation cards at the bottom of documentation articles, dynamically sequenced by category and document order.
+* **Enterprise Customizer Settings**: A premium, tabbed dashboard options page allowing you to configure custom base slugs, primary hover colors, rating widgets, TOCs, Q&A Comments toggle, Article Navigation toggle, and rate limit parameters.
 
 == Installation ==
 
@@ -67,6 +68,9 @@ This plugin supports optional third-party integrations:
 * Added Video Tutorial Documentation feature: dedicated Video Walkthrough meta box for YouTube, Vimeo, and WordPress oEmbed links.
 * Added responsive 16:9 enterprise-grade video player container above article content.
 * Added visual Video Guide indicator badges in the sidebar accordion, category archive cards, and portal grid.
+* Added Sequential Article Navigation (Previous / Next) with 2-column responsive cards ordered within the same category.
+* Added admin setting toggle for Sequential Article Navigation in Settings > Features.
+* Added developer action hook yukdigitalz_kb_after_video_player for video player extensions.
 * Added third-party embedded video privacy disclosure in compliance with WordPress.org guidelines.
 
 = 1.1.2 =
