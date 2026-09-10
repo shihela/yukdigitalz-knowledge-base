@@ -63,11 +63,11 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 				$yukdigitalz_kb_ancestors = get_ancestors( $yukdigitalz_kb_current_term->term_id, 'yukdigitalz_kb_cat', 'taxonomy' );
 				if ( ! empty( $yukdigitalz_kb_ancestors ) && is_array( $yukdigitalz_kb_ancestors ) ) {
 					$yukdigitalz_kb_ancestors = array_reverse( $yukdigitalz_kb_ancestors );
-					foreach ( $yukdigitalz_kb_ancestors as $ancestor_id ) {
-						$ancestor_term = get_term( $ancestor_id, 'yukdigitalz_kb_cat' );
-						if ( $ancestor_term && ! is_wp_error( $ancestor_term ) ) {
+					foreach ( $yukdigitalz_kb_ancestors as $yukdigitalz_kb_ancestor_id ) {
+						$yukdigitalz_kb_ancestor_term = get_term( $yukdigitalz_kb_ancestor_id, 'yukdigitalz_kb_cat' );
+						if ( $yukdigitalz_kb_ancestor_term && ! is_wp_error( $yukdigitalz_kb_ancestor_term ) ) {
 							echo '<span class="yukdigitalz-kb-breadcrumb-sep" aria-hidden="true">/</span>';
-							echo '<a href="' . esc_url( get_term_link( $ancestor_term ) ) . '">' . esc_html( $ancestor_term->name ) . '</a>';
+							echo '<a href="' . esc_url( get_term_link( $yukdigitalz_kb_ancestor_term ) ) . '">' . esc_html( $yukdigitalz_kb_ancestor_term->name ) . '</a>';
 						}
 					}
 				}
@@ -98,9 +98,9 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 		<?php if ( $yukdigitalz_kb_is_parent ) : ?>
 			<!-- VIEW A: PARENT CATEGORY DIRECTORY (Product Cards Showcase Grid) -->
 			<div class="yukdigitalz-kb-product-grid">
-				<?php foreach ( $yukdigitalz_kb_subcats as $sub_cat ) :
-					$sub_doc_count = \Shihela\YukdigitalzKnowledgeBase\Templates::get_category_doc_count( $sub_cat );
-					$recent_docs_query = new \WP_Query( array(
+				<?php foreach ( $yukdigitalz_kb_subcats as $yukdigitalz_kb_sub_cat ) :
+					$yukdigitalz_kb_sub_doc_count = \Shihela\YukdigitalzKnowledgeBase\Templates::get_category_doc_count( $yukdigitalz_kb_sub_cat );
+					$yukdigitalz_kb_recent_docs_query = new \WP_Query( array(
 						'post_type'      => 'yukdigitalz_kb_doc',
 						'post_status'    => 'publish',
 						'posts_per_page' => 3,
@@ -108,7 +108,7 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 							array(
 								'taxonomy'         => 'yukdigitalz_kb_cat',
 								'field'            => 'term_id',
-								'terms'            => $sub_cat->term_id,
+								'terms'            => $yukdigitalz_kb_sub_cat->term_id,
 								'include_children' => false,
 							),
 						),
@@ -123,26 +123,26 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 								<span class="yukdigitalz-kb-product-badge">
 									<?php
 									/* translators: %s: number of articles */
-									printf( esc_html( _n( '%s Guide', '%s Guides', $sub_doc_count, 'yukdigitalz-knowledge-base' ) ), esc_html( $sub_doc_count ) );
+									printf( esc_html( _n( '%s Guide', '%s Guides', $yukdigitalz_kb_sub_doc_count, 'yukdigitalz-knowledge-base' ) ), esc_html( $yukdigitalz_kb_sub_doc_count ) );
 									?>
 								</span>
 							</div>
 
 							<h2 class="yukdigitalz-kb-product-title">
-								<a href="<?php echo esc_url( get_term_link( $sub_cat ) ); ?>">
-									<?php echo esc_html( $sub_cat->name ); ?>
+								<a href="<?php echo esc_url( get_term_link( $yukdigitalz_kb_sub_cat ) ); ?>">
+									<?php echo esc_html( $yukdigitalz_kb_sub_cat->name ); ?>
 								</a>
 							</h2>
 
-							<?php if ( ! empty( $sub_cat->description ) ) : ?>
+							<?php if ( ! empty( $yukdigitalz_kb_sub_cat->description ) ) : ?>
 								<p class="yukdigitalz-kb-product-desc">
-									<?php echo esc_html( wp_trim_words( $sub_cat->description, 16 ) ); ?>
+									<?php echo esc_html( wp_trim_words( $yukdigitalz_kb_sub_cat->description, 16 ) ); ?>
 								</p>
 							<?php endif; ?>
 
-							<?php if ( $recent_docs_query->have_posts() ) : ?>
+							<?php if ( $yukdigitalz_kb_recent_docs_query->have_posts() ) : ?>
 								<ul class="yukdigitalz-kb-product-recent-list">
-									<?php while ( $recent_docs_query->have_posts() ) : $recent_docs_query->the_post(); ?>
+									<?php while ( $yukdigitalz_kb_recent_docs_query->have_posts() ) : $yukdigitalz_kb_recent_docs_query->the_post(); ?>
 										<li>
 											<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
 											<a href="<?php echo esc_url( get_permalink() ); ?>">
@@ -154,7 +154,7 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 							<?php endif; ?>
 						</div>
 
-						<a href="<?php echo esc_url( get_term_link( $sub_cat ) ); ?>" class="yukdigitalz-kb-product-btn">
+						<a href="<?php echo esc_url( get_term_link( $yukdigitalz_kb_sub_cat ) ); ?>" class="yukdigitalz-kb-product-btn">
 							<span><?php esc_html_e( 'Explore Documentation', 'yukdigitalz-knowledge-base' ); ?></span>
 							<span aria-hidden="true">&rarr;</span>
 						</a>
@@ -164,7 +164,7 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 
 			<?php
 			// Check if parent category also has direct posts assigned directly to it
-			$parent_direct_query = new \WP_Query( array(
+			$yukdigitalz_kb_parent_direct_query = new \WP_Query( array(
 				'post_type'      => 'yukdigitalz_kb_doc',
 				'post_status'    => 'publish',
 				'posts_per_page' => -1,
@@ -178,12 +178,12 @@ if ( ! empty( $yukdigitalz_kb_subcats ) && ! is_wp_error( $yukdigitalz_kb_subcat
 				),
 			) );
 
-			if ( $parent_direct_query->have_posts() ) :
+			if ( $yukdigitalz_kb_parent_direct_query->have_posts() ) :
 			?>
 				<div class="yukdigitalz-kb-parent-direct-section" style="margin-top: 40px;">
 					<h2 style="font-size: 1.3rem; margin-bottom: 16px; font-weight: 700;"><?php esc_html_e( 'General Guides', 'yukdigitalz-knowledge-base' ); ?></h2>
 					<div class="yukdigitalz-kb-category-archive-list" style="display: flex; flex-direction: column; gap: 16px;">
-						<?php while ( $parent_direct_query->have_posts() ) : $parent_direct_query->the_post(); ?>
+						<?php while ( $yukdigitalz_kb_parent_direct_query->have_posts() ) : $yukdigitalz_kb_parent_direct_query->the_post(); ?>
 							<article class="yukdigitalz-kb-archive-item-card" style="padding: 20px; border: 1px solid var(--yukdigitalz-kb-border); border-radius: var(--yukdigitalz-kb-radius-sm); background: var(--yukdigitalz-kb-card-bg);">
 								<h3 style="margin: 0 0 8px 0; font-size: 1.15rem;">
 									<a href="<?php echo esc_url( get_permalink() ); ?>" style="color: var(--yukdigitalz-kb-text-main); text-decoration: none;">
