@@ -46,8 +46,7 @@ class Shortcode {
 		ob_start();
 		?>
 		<div class="yukdigitalz-kb-wrapper">
-			<template shadowrootmode="open">
-				<div class="yukdigitalz-kb-wrapper-inner">
+			<div class="yukdigitalz-kb-wrapper-inner">
 			<!-- Header Search Section -->
 			<header class="yukdigitalz-kb-header">
 				<h1 class="yukdigitalz-kb-title"><?php esc_html_e( 'Documentation & Knowledge Base', 'yukdigitalz-knowledge-base' ); ?></h1>
@@ -271,8 +270,7 @@ class Shortcode {
 				}
 				?>
 			</main>
-				</div>
-			</template>
+			</div>
 		</div>
 		<?php
 		return ob_get_clean();

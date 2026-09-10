@@ -46,8 +46,7 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 ?>
 
 <div class="yukdigitalz-kb-doc-layout">
-	<template shadowrootmode="open">
-		<div class="yukdigitalz-kb-doc-layout-inner">
+	<div class="yukdigitalz-kb-doc-layout-inner">
 	<!-- Left Sidebar: Collapsible Categories Accordion -->
 	<aside class="yukdigitalz-kb-sidebar-nav" aria-label="<?php esc_attr_e( 'Documentation Navigation', 'yukdigitalz-knowledge-base' ); ?>">
 		<button type="button" class="yukdigitalz-kb-mobile-nav-toggle" aria-expanded="false">
@@ -81,23 +80,31 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 
 			<!-- Title and Meta -->
 			<header class="yukdigitalz-kb-article-header">
-				<h1 class="yukdigitalz-kb-article-title"><?php echo esc_html( get_the_title() ); ?></h1>
-				<div class="yukdigitalz-kb-article-meta">
-					<span class="yukdigitalz-kb-meta-item">
-						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" aria-hidden="true" style="width: 16px; height: 16px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-						<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
-					</span>
-					
-					<?php if ( $yukdigitalz_kb_enable_reading_time ) : ?>
+				<div class="yukdigitalz-kb-article-header-left">
+					<h1 class="yukdigitalz-kb-article-title"><?php echo esc_html( get_the_title() ); ?></h1>
+					<div class="yukdigitalz-kb-article-meta">
 						<span class="yukdigitalz-kb-meta-item">
-							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock" aria-hidden="true" style="width: 16px; height: 16px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-							<?php
-							/* translators: %s: number of reading minutes */
-							printf( esc_html( _n( '%s Min Read', '%s Mins Read', $yukdigitalz_kb_reading_time, 'yukdigitalz-knowledge-base' ) ), esc_html( $yukdigitalz_kb_reading_time ) );
-							?>
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" aria-hidden="true" style="width: 16px; height: 16px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+							<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
 						</span>
-					<?php endif; ?>
+						
+						<?php if ( $yukdigitalz_kb_enable_reading_time ) : ?>
+							<span class="yukdigitalz-kb-meta-item">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock" aria-hidden="true" style="width: 16px; height: 16px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+								<?php
+								/* translators: %s: number of reading minutes */
+								printf( esc_html( _n( '%s Min Read', '%s Mins Read', $yukdigitalz_kb_reading_time, 'yukdigitalz-knowledge-base' ) ), esc_html( $yukdigitalz_kb_reading_time ) );
+								?>
+							</span>
+						<?php endif; ?>
+					</div>
 				</div>
+				<?php if ( $yukdigitalz_kb_enable_ai_chat ) : ?>
+					<button type="button" class="yukdigitalz-kb-ai-header-btn" aria-label="<?php esc_attr_e( 'Ask AI about this article', 'yukdigitalz-knowledge-base' ); ?>">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.4-2.4 7.2-2.4-7.2L2 12l7.6-2.4z"/></svg>
+						<span><?php esc_html_e( 'Ask AI', 'yukdigitalz-knowledge-base' ); ?></span>
+					</button>
+				<?php endif; ?>
 			</header>
 
 			<!-- Dynamic Table of Contents Injected Here -->
@@ -138,7 +145,11 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 			<?php endif; ?>
 
 			<!-- Comments Template for Q&A Discussions -->
-			<slot name="comments"></slot>
+			<?php if ( $yukdigitalz_kb_enable_comments && ( comments_open() || get_comments_number() ) ) : ?>
+				<div class="yukdigitalz-kb-comments-wrapper">
+					<?php comments_template(); ?>
+				</div>
+			<?php endif; ?>
 
 		<?php endwhile; endif; ?>
 	</article>
@@ -180,14 +191,6 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 		</div>
 	<?php endif; ?>
 		</div>
-	</template>
-
-	<!-- Comments Template in the Light DOM (projected via slot) -->
-	<?php if ( $yukdigitalz_kb_enable_comments && ( comments_open() || get_comments_number() ) ) : ?>
-		<div slot="comments" class="yukdigitalz-kb-comments-wrapper">
-			<?php comments_template(); ?>
-		</div>
-	<?php endif; ?>
 </div>
 
 <?php

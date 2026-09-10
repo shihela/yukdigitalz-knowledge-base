@@ -22,8 +22,7 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 ?>
 
 <div class="yukdigitalz-kb-doc-layout">
-	<template shadowrootmode="open">
-		<div class="yukdigitalz-kb-doc-layout-inner">
+	<div class="yukdigitalz-kb-doc-layout-inner">
 	<!-- Left Sidebar: Collapsible Categories Accordion -->
 	<aside class="yukdigitalz-kb-sidebar-nav" aria-label="<?php esc_attr_e( 'Documentation Navigation', 'yukdigitalz-knowledge-base' ); ?>">
 		<button type="button" class="yukdigitalz-kb-mobile-nav-toggle" aria-expanded="false">
@@ -47,10 +46,18 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 			<span class="yukdigitalz-kb-breadcrumb-current" aria-current="page"><?php echo esc_html( $yukdigitalz_kb_current_term->name ); ?></span>
 		</nav>
 
-		<header class="yukdigitalz-kb-archive-header" style="margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid var(--yukdigitalz-kb-border);">
-			<h1 class="yukdigitalz-kb-article-title"><?php echo esc_html( $yukdigitalz_kb_current_term->name ); ?></h1>
-			<?php if ( ! empty( $yukdigitalz_kb_current_term->description ) ) : ?>
-				<p class="yukdigitalz-kb-category-description" style="color: var(--yukdigitalz-kb-text-muted); font-size: 1.05rem; margin-top: 8px;"><?php echo esc_html( $yukdigitalz_kb_current_term->description ); ?></p>
+		<header class="yukdigitalz-kb-archive-header">
+			<div class="yukdigitalz-kb-article-header-left">
+				<h1 class="yukdigitalz-kb-article-title"><?php echo esc_html( $yukdigitalz_kb_current_term->name ); ?></h1>
+				<?php if ( ! empty( $yukdigitalz_kb_current_term->description ) ) : ?>
+					<p class="yukdigitalz-kb-category-description" style="color: var(--yukdigitalz-kb-text-muted); font-size: 1.05rem; margin-top: 8px;"><?php echo esc_html( $yukdigitalz_kb_current_term->description ); ?></p>
+				<?php endif; ?>
+			</div>
+			<?php if ( $yukdigitalz_kb_enable_ai_chat ) : ?>
+				<button type="button" class="yukdigitalz-kb-ai-header-btn" aria-label="<?php esc_attr_e( 'Ask AI about this category', 'yukdigitalz-knowledge-base' ); ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" aria-hidden="true"><path d="M12 2l2.4 7.2L22 12l-7.6 2.4-2.4 7.2-2.4-7.2L2 12l7.6-2.4z"/></svg>
+					<span><?php esc_html_e( 'Ask AI', 'yukdigitalz-knowledge-base' ); ?></span>
+				</button>
 			<?php endif; ?>
 		</header>
 
@@ -128,7 +135,6 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 		</div>
 	<?php endif; ?>
 		</div>
-	</template>
 </div>
 
 <?php

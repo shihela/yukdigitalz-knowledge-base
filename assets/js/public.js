@@ -1,62 +1,4 @@
 (function() {
-	function initShadowRootFixes() {
-		if (!HTMLTemplateElement.prototype.hasOwnProperty('shadowRootMode')) {
-			polyfill(document);
-		} else {
-			injectStylesToAllNativeShadowRoots();
-		}
-	}
-
-	function polyfill(root) {
-		root.querySelectorAll('template[shadowrootmode]').forEach(function(template) {
-			var mode = template.getAttribute('shadowrootmode');
-			var shadowRoot = template.parentNode.attachShadow({ mode: mode });
-			shadowRoot.appendChild(template.content);
-			template.remove();
-			injectStylesToShadow(shadowRoot);
-			polyfill(shadowRoot);
-		});
-	}
-
-	function injectStylesToAllNativeShadowRoots() {
-		document.querySelectorAll('.yukdigitalz-kb-wrapper, .yukdigitalz-kb-doc-layout').forEach(host => {
-			if (host.shadowRoot) {
-				injectStylesToShadow(host.shadowRoot);
-			}
-		});
-	}
-
-	function injectStylesToShadow(shadowRoot) {
-		if (!shadowRoot) return;
-		if (window.yukdigitalz_kb_vars && window.yukdigitalz_kb_vars.public_css_url) {
-			if (!shadowRoot.querySelector('link[href*="public.css"]')) {
-				const link = document.createElement('link');
-				link.rel = 'stylesheet';
-				link.href = window.yukdigitalz_kb_vars.public_css_url;
-				shadowRoot.insertBefore(link, shadowRoot.firstChild);
-			}
-		}
-		if (window.yukdigitalz_kb_vars && window.yukdigitalz_kb_vars.colors) {
-			if (!shadowRoot.querySelector('#yukdigitalz-kb-dynamic-colors')) {
-				const style = document.createElement('style');
-				style.id = 'yukdigitalz-kb-dynamic-colors';
-				style.textContent = `
-					:host {
-						--yukdigitalz-kb-primary: ${window.yukdigitalz_kb_vars.colors.primary} !important;
-						--yukdigitalz-kb-primary-hover: ${window.yukdigitalz_kb_vars.colors.secondary} !important;
-						--yukdigitalz-kb-accent: ${window.yukdigitalz_kb_vars.colors.accent} !important;
-					}
-				`;
-				shadowRoot.appendChild(style);
-			}
-		}
-	}
-
-	// Run immediately
-	initShadowRootFixes();
-
-	// Also run on DOMContentLoaded just in case
-	document.addEventListener('DOMContentLoaded', initShadowRootFixes);
 
 /**
  * Helper to retrieve active roots (both Light DOM document and all active Shadow Roots).
@@ -120,16 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	// Initialize AI Chat Assistant
 	initAIChat();
 
-	// Initialize SaaS Header AI Button
-	injectAIHeaderButton();
-	let injectAttempts = 0;
-	const injectInterval = setInterval(function() {
-		injectAIHeaderButton();
-		injectAttempts++;
-		if (injectAttempts > 30) {
-			clearInterval(injectInterval);
-		}
-	}, 100);
+	// Initialize Header AI Button
+	initAIHeaderButtons();
 });
 
 /**
@@ -744,123 +678,25 @@ function initAIChat() {
 }
 
 /**
- * Injects a Cloudflare-style header pill button for the AI assistant inside Shadow DOM layouts.
+ * Handles click interactions for the Ask AI header button.
  */
-function injectAIHeaderButton() {
-	// Inject Light DOM layout transitions so they cleanly override theme wrappers
-	if (!document.getElementById('yukdigitalz-kb-free-ai-light-styles')) {
-		const lightStyle = document.createElement('style');
-		lightStyle.id = 'yukdigitalz-kb-free-ai-light-styles';
-		lightStyle.textContent = `
-			html.ai-drawer-open,
-			body.ai-drawer-open {
-				padding-right: 0 !important;
-			}
-			@media (max-width: 1024px) {
-				.yukdigitalz-kb-doc-layout.ai-drawer-open {
-					position: relative !important;
-					z-index: 2147483647 !important;
-				}
-				body.ai-drawer-open > *:not(.yukdigitalz-kb-doc-layout):not(script):not(style):not(link) {
-					z-index: 1 !important;
-				}
-			}
-		`;
-		document.head.appendChild(lightStyle);
-	}
-
-	const hosts = document.querySelectorAll('.yukdigitalz-kb-doc-layout');
-	hosts.forEach(host => {
-		const shadowRoot = host.shadowRoot;
-		if (!shadowRoot) return;
-
-		// 1. Inject styling overrides directly into the Shadow DOM context
-		if (!shadowRoot.querySelector('#yukdigitalz-kb-pro-ai-inject-styles')) {
-			const style = document.createElement('style');
-			style.id = 'yukdigitalz-kb-pro-ai-inject-styles';
-			style.textContent = `
-				@media (min-width: 1025px) {
-					#yukdigitalz-kb-ai-trigger {
-						display: none !important;
-					}
-				}
-				.yukdigitalz-kb-article-header,
-				.yukdigitalz-kb-archive-header {
-					display: flex !important;
-					justify-content: space-between !important;
-					align-items: flex-start !important;
-					gap: 20px !important;
-					border-bottom: 1px solid var(--yukdigitalz-kb-border, #e2e8f0) !important;
-					padding-bottom: 16px !important;
-					margin-bottom: 24px !important;
-				}
-				.yukdigitalz-kb-article-header-left {
-					flex: 1 !important;
-				}
-				.yukdigitalz-kb-ai-header-btn {
-					display: inline-flex !important;
-					align-items: center !important;
-					gap: 6px !important;
-					background-color: transparent !important;
-					border: 1px solid var(--yukdigitalz-kb-border, #e2e8f0) !important;
-					padding: 6px 14px !important;
-					border-radius: 9999px !important;
-					font-size: 0.85rem !important;
-					font-weight: 600 !important;
-					color: var(--yukdigitalz-kb-text-muted, #64748b) !important;
-					cursor: pointer !important;
-					transition: all 0.2s ease !important;
-					margin-top: 4px !important;
-					white-space: nowrap !important;
-					font-family: inherit !important;
-				}
-				.yukdigitalz-kb-ai-header-btn:hover {
-					background-color: var(--yukdigitalz-kb-bg-body, #f8fafc) !important;
-					color: var(--yukdigitalz-kb-primary, #2563eb) !important;
-					border-color: var(--yukdigitalz-kb-primary, #2563eb) !important;
-				}
-				.yukdigitalz-kb-ai-header-btn svg {
-					color: var(--yukdigitalz-kb-accent, #f59e0b) !important;
-				}
-			`;
-			shadowRoot.appendChild(style);
+function initAIHeaderButtons() {
+	document.addEventListener('click', function(e) {
+		const aiBtn = e.target.closest('.yukdigitalz-kb-ai-header-btn');
+		if (!aiBtn) {
+			return;
 		}
 
-		// 2. Locate the header to append the button
-		const articleHeader = shadowRoot.querySelector('.yukdigitalz-kb-article-header') || shadowRoot.querySelector('.yukdigitalz-kb-archive-header');
-		if (articleHeader && !articleHeader.querySelector('.yukdigitalz-kb-ai-header-btn')) {
-			// Wrap current header child nodes inside a left-aligned container
-			const leftDiv = document.createElement('div');
-			leftDiv.className = 'yukdigitalz-kb-article-header-left';
-			while (articleHeader.firstChild) {
-				leftDiv.appendChild(articleHeader.firstChild);
+		e.preventDefault();
+		e.stopPropagation();
+
+		if (typeof window.yukdigitalzKBOpenAIDrawer === 'function') {
+			window.yukdigitalzKBOpenAIDrawer();
+		} else {
+			const trigger = getElementByIdKB('yukdigitalz-kb-ai-trigger');
+			if (trigger) {
+				trigger.click();
 			}
-			articleHeader.appendChild(leftDiv);
-
-			// Create the Cloudflare-style Ask AI header button
-			const aiBtn = document.createElement('button');
-			aiBtn.type = 'button';
-			aiBtn.className = 'yukdigitalz-kb-ai-header-btn';
-			aiBtn.innerHTML = `
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14" style="margin-right: 4px;"><path d="M12 2l2.4 7.2L22 12l-7.6 2.4-2.4 7.2-2.4-7.2L2 12l7.6-2.4z"/></svg>
-				<span>Ask AI</span>
-			`;
-
-			// Bind trigger action
-			aiBtn.addEventListener('click', function(e) {
-				e.preventDefault();
-				e.stopPropagation();
-				if (typeof window.yukdigitalzKBOpenAIDrawer === 'function') {
-					window.yukdigitalzKBOpenAIDrawer();
-				} else {
-					const trigger = shadowRoot.querySelector('#yukdigitalz-kb-ai-trigger');
-					if (trigger) {
-						trigger.click();
-					}
-				}
-			});
-
-			articleHeader.appendChild(aiBtn);
 		}
 	});
 }

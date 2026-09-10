@@ -841,16 +841,58 @@ svg.yukdigitalz-kb-mobile-chevron {
 	color: var(--yukdigitalz-kb-border) !important;
 }
 
-/* Article Meta */
+/* Article Header & Meta */
+.yukdigitalz-kb-article-header,
+.yukdigitalz-kb-archive-header {
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: flex-start !important;
+	gap: 20px !important;
+	border-bottom: 1px solid var(--yukdigitalz-kb-border, #e2e8f0) !important;
+	padding-bottom: 20px !important;
+	margin-bottom: 28px !important;
+}
+
+.yukdigitalz-kb-article-header-left {
+	flex: 1 !important;
+}
+
+.yukdigitalz-kb-ai-header-btn {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 6px !important;
+	background-color: transparent !important;
+	border: 1px solid var(--yukdigitalz-kb-border, #e2e8f0) !important;
+	padding: 6px 14px !important;
+	border-radius: 9999px !important;
+	font-size: 0.85rem !important;
+	font-weight: 600 !important;
+	color: var(--yukdigitalz-kb-text-muted, #64748b) !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	margin-top: 4px !important;
+	white-space: nowrap !important;
+	font-family: inherit !important;
+}
+
+.yukdigitalz-kb-ai-header-btn:hover {
+	background-color: var(--yukdigitalz-kb-bg-body, #f8fafc) !important;
+	color: var(--yukdigitalz-kb-primary, #2563eb) !important;
+	border-color: var(--yukdigitalz-kb-primary, #2563eb) !important;
+}
+
+.yukdigitalz-kb-ai-header-btn svg {
+	color: var(--yukdigitalz-kb-accent, #f59e0b) !important;
+	margin-right: 4px;
+}
+
 .yukdigitalz-kb-article-meta {
 	display: flex;
 	align-items: center;
 	gap: 16px;
 	font-size: 0.85rem;
 	color: var(--yukdigitalz-kb-text-muted);
-	margin-bottom: 28px;
-	padding-bottom: 20px;
-	border-bottom: 1px solid var(--yukdigitalz-kb-border);
+	margin-top: 8px;
 }
 
 .yukdigitalz-kb-meta-item {
@@ -1570,6 +1612,9 @@ svg.yukdigitalz-kb-mobile-chevron {
 }
 
 @media (min-width: 1025px) {
+	#yukdigitalz-kb-ai-trigger {
+		display: none !important;
+	}
 	.yukdigitalz-kb-ai-backdrop,
 	.yukdigitalz-kb-ai-backdrop.open,
 	:host(.ai-drawer-open) .yukdigitalz-kb-ai-backdrop,
