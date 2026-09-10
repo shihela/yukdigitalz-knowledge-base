@@ -4,7 +4,7 @@ Tags: knowledge base, documentation, wiki, docs, rag ai assistant
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,9 @@ Yes. Copy any template file from the plugin's `templates/` folder and paste it i
 3. Slide-out RAG AI Chat Assistant drawer interface.
 
 == Changelog ==
+
+= 1.0.1 =
+* Fixed shadow mode on single article page
 
 = 1.0.0 =
 * Initial release.
