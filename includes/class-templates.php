@@ -330,10 +330,19 @@ class Templates {
 								<ul id="<?php echo esc_attr( $sub_group_id ); ?>" class="yukdigitalz-kb-sidebar-articles yukdigitalz-kb-sidebar-subcat-articles" role="region" aria-label="<?php echo esc_attr( $child_cat->name ); ?>">
 									<?php if ( $child_docs_query->have_posts() ) : ?>
 										<?php while ( $child_docs_query->have_posts() ) : $child_docs_query->the_post(); ?>
-											<?php $is_active = ( get_the_ID() === $current_post_id ); ?>
+											<?php
+											$is_active = ( get_the_ID() === $current_post_id );
+											$has_video = ! empty( get_post_meta( get_the_ID(), '_yukdigitalz_kb_video_url', true ) );
+											?>
 											<li class="<?php echo $is_active ? 'yukdigitalz-kb-active-article' : ''; ?>">
 												<a href="<?php echo esc_url( get_permalink() ); ?>" <?php echo $is_active ? 'aria-current="page"' : ''; ?>>
-													<?php echo esc_html( get_the_title() ); ?>
+													<span class="yukdigitalz-kb-sidebar-article-title"><?php echo esc_html( get_the_title() ); ?></span>
+													<?php if ( $has_video ) : ?>
+														<span class="yukdigitalz-kb-video-badge" title="<?php esc_attr_e( 'Video Guide Included', 'yukdigitalz-knowledge-base' ); ?>">
+															<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+															<span><?php esc_html_e( 'Video', 'yukdigitalz-knowledge-base' ); ?></span>
+														</span>
+													<?php endif; ?>
 												</a>
 											</li>
 										<?php endwhile; ?>
@@ -365,10 +374,19 @@ class Templates {
 							?>
 							<ul class="yukdigitalz-kb-sidebar-articles yukdigitalz-kb-direct-articles">
 								<?php while ( $top_direct_docs_query->have_posts() ) : $top_direct_docs_query->the_post(); ?>
-									<?php $is_active = ( get_the_ID() === $current_post_id ); ?>
+									<?php
+									$is_active = ( get_the_ID() === $current_post_id );
+									$has_video = ! empty( get_post_meta( get_the_ID(), '_yukdigitalz_kb_video_url', true ) );
+									?>
 									<li class="<?php echo $is_active ? 'yukdigitalz-kb-active-article' : ''; ?>">
 										<a href="<?php echo esc_url( get_permalink() ); ?>" <?php echo $is_active ? 'aria-current="page"' : ''; ?>>
-											<?php echo esc_html( get_the_title() ); ?>
+											<span class="yukdigitalz-kb-sidebar-article-title"><?php echo esc_html( get_the_title() ); ?></span>
+											<?php if ( $has_video ) : ?>
+												<span class="yukdigitalz-kb-video-badge" title="<?php esc_attr_e( 'Video Guide Included', 'yukdigitalz-knowledge-base' ); ?>">
+													<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+													<span><?php esc_html_e( 'Video', 'yukdigitalz-knowledge-base' ); ?></span>
+												</span>
+											<?php endif; ?>
 										</a>
 									</li>
 								<?php endwhile; ?>
@@ -395,10 +413,19 @@ class Templates {
 						<ul class="yukdigitalz-kb-sidebar-articles">
 							<?php if ( $top_docs_query->have_posts() ) : ?>
 								<?php while ( $top_docs_query->have_posts() ) : $top_docs_query->the_post(); ?>
-									<?php $is_active = ( get_the_ID() === $current_post_id ); ?>
+									<?php
+									$is_active = ( get_the_ID() === $current_post_id );
+									$has_video = ! empty( get_post_meta( get_the_ID(), '_yukdigitalz_kb_video_url', true ) );
+									?>
 									<li class="<?php echo $is_active ? 'yukdigitalz-kb-active-article' : ''; ?>">
 										<a href="<?php echo esc_url( get_permalink() ); ?>" <?php echo $is_active ? 'aria-current="page"' : ''; ?>>
-											<?php echo esc_html( get_the_title() ); ?>
+											<span class="yukdigitalz-kb-sidebar-article-title"><?php echo esc_html( get_the_title() ); ?></span>
+											<?php if ( $has_video ) : ?>
+												<span class="yukdigitalz-kb-video-badge" title="<?php esc_attr_e( 'Video Guide Included', 'yukdigitalz-knowledge-base' ); ?>">
+													<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+													<span><?php esc_html_e( 'Video', 'yukdigitalz-knowledge-base' ); ?></span>
+												</span>
+											<?php endif; ?>
 										</a>
 									</li>
 								<?php endwhile; ?>

@@ -166,12 +166,19 @@ class Shortcode {
 											<ul class="yukdigitalz-kb-category-docs">
 												<?php if ( $sub_doc_query->have_posts() ) : ?>
 													<?php while ( $sub_doc_query->have_posts() ) : $sub_doc_query->the_post(); ?>
+														<?php $has_video = ! empty( get_post_meta( get_the_ID(), '_yukdigitalz_kb_video_url', true ) ); ?>
 														<li>
 															<a href="<?php echo esc_url( get_permalink() ); ?>">
 																<span class="yukdigitalz-kb-doc-icon" aria-hidden="true">
 																	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text" style="width: 16px; height: 16px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
 																</span>
-																<?php echo esc_html( get_the_title() ); ?>
+																<span class="yukdigitalz-kb-doc-title-text"><?php echo esc_html( get_the_title() ); ?></span>
+																<?php if ( $has_video ) : ?>
+																	<span class="yukdigitalz-kb-video-badge" title="<?php esc_attr_e( 'Video Guide Included', 'yukdigitalz-knowledge-base' ); ?>">
+																		<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+																		<span><?php esc_html_e( 'Video', 'yukdigitalz-knowledge-base' ); ?></span>
+																	</span>
+																<?php endif; ?>
 															</a>
 														</li>
 													<?php endwhile; ?>
@@ -232,12 +239,19 @@ class Shortcode {
 										<ul class="yukdigitalz-kb-category-docs">
 											<?php if ( $doc_query->have_posts() ) : ?>
 												<?php while ( $doc_query->have_posts() ) : $doc_query->the_post(); ?>
+													<?php $has_video = ! empty( get_post_meta( get_the_ID(), '_yukdigitalz_kb_video_url', true ) ); ?>
 													<li>
 														<a href="<?php echo esc_url( get_permalink() ); ?>">
 															<span class="yukdigitalz-kb-doc-icon" aria-hidden="true">
 																<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text" style="width: 16px; height: 16px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
 															</span>
-															<?php echo esc_html( get_the_title() ); ?>
+															<span class="yukdigitalz-kb-doc-title-text"><?php echo esc_html( get_the_title() ); ?></span>
+															<?php if ( $has_video ) : ?>
+																<span class="yukdigitalz-kb-video-badge" title="<?php esc_attr_e( 'Video Guide Included', 'yukdigitalz-knowledge-base' ); ?>">
+																	<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-play" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+																	<span><?php esc_html_e( 'Video', 'yukdigitalz-knowledge-base' ); ?></span>
+																</span>
+															<?php endif; ?>
 														</a>
 													</li>
 												<?php endwhile; ?>

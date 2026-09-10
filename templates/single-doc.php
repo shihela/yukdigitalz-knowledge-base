@@ -108,6 +108,23 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 				<?php endif; ?>
 			</header>
 
+			<!-- Video Walkthrough Player (if configured) -->
+			<?php
+			$yukdigitalz_kb_video_url = get_post_meta( $yukdigitalz_kb_current_post_id, '_yukdigitalz_kb_video_url', true );
+			if ( ! empty( $yukdigitalz_kb_video_url ) ) :
+				$yukdigitalz_kb_video_embed = wp_oembed_get( esc_url( $yukdigitalz_kb_video_url ), array( 'width' => 1200 ) );
+				if ( $yukdigitalz_kb_video_embed ) :
+					?>
+					<div class="yukdigitalz-kb-video-container" aria-label="<?php esc_attr_e( 'Video Walkthrough', 'yukdigitalz-knowledge-base' ); ?>">
+						<div class="yukdigitalz-kb-video-wrapper">
+							<?php echo $yukdigitalz_kb_video_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						</div>
+					</div>
+					<?php
+				endif;
+			endif;
+			?>
+
 			<!-- Dynamic Table of Contents Injected Here -->
 			<?php if ( $yukdigitalz_kb_enable_toc ) : ?>
 				<nav class="yukdigitalz-kb-toc-wrapper" aria-label="<?php esc_attr_e( 'Table of contents', 'yukdigitalz-knowledge-base' ); ?>">
