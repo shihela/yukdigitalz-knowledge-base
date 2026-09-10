@@ -119,6 +119,7 @@ $yukdigitalz_kb_accent_color    = sanitize_hex_color( get_option( 'yukdigitalz_k
 						<div class="yukdigitalz-kb-video-wrapper">
 							<?php echo $yukdigitalz_kb_video_embed; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</div>
+						<?php do_action( 'yukdigitalz_kb_after_video_player', $yukdigitalz_kb_current_post_id, $yukdigitalz_kb_video_url ); ?>
 					</div>
 					<?php
 				endif;
