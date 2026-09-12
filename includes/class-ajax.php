@@ -91,7 +91,7 @@ class Ajax {
 		check_ajax_referer( 'yukdigitalz_kb_ajax_nonce', 'security' );
 
 		$post_id = isset( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
-		$vote    = isset( $_POST['vote'] ) ? sanitize_key( $_POST['vote'] ) : '';
+		$vote    = isset( $_POST['vote'] ) ? sanitize_key( wp_unslash( $_POST['vote'] ) ) : '';
 
 		if ( ! $post_id || ! in_array( $vote, array( 'helpful', 'not_helpful' ), true ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Invalid parameters', 'yukdigitalz-knowledge-base' ) ) );

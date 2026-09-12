@@ -424,7 +424,7 @@ class CPT {
 	 */
 	public function save_meta_boxes( $post_id ) {
 		// Nonce check
-		if ( ! isset( $_POST['yukdigitalz_kb_video_meta_nonce'] ) || ! wp_verify_nonce( sanitize_key( $_POST['yukdigitalz_kb_video_meta_nonce'] ), 'yukdigitalz_kb_video_meta_action' ) ) {
+		if ( ! isset( $_POST['yukdigitalz_kb_video_meta_nonce'] ) || ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['yukdigitalz_kb_video_meta_nonce'] ) ), 'yukdigitalz_kb_video_meta_action' ) ) {
 			return;
 		}
 
@@ -439,7 +439,7 @@ class CPT {
 		}
 
 		if ( isset( $_POST['yukdigitalz_kb_video_url'] ) ) {
-			$video_url = esc_url_raw( trim( wp_unslash( $_POST['yukdigitalz_kb_video_url'] ) ) );
+			$video_url = esc_url_raw( wp_unslash( $_POST['yukdigitalz_kb_video_url'] ) );
 			if ( ! empty( $video_url ) ) {
 				update_post_meta( $post_id, '_yukdigitalz_kb_video_url', $video_url );
 			} else {
