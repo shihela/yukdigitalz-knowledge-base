@@ -72,6 +72,9 @@ This plugin supports optional third-party integrations:
 * Added admin setting toggle for Sequential Article Navigation in Settings > Features.
 * Added developer action hook yukdigitalz_kb_after_video_player for video player extensions.
 * Added third-party embedded video privacy disclosure in compliance with WordPress.org guidelines.
+* Fixed mobile responsive horizontal overflow by enforcing min-width: 0 truncation on card titles and adding overflow-x containment.
+* Improved multi-tier responsive breakpoints (768px, 640px, 480px) and responsive wrapping for pagination buttons.
+* Enhanced input sanitization and unslashing for video URLs and AJAX parameters to strictly satisfy WordPress.org Plugin Check standards.
 
 = 1.1.2 =
 * Fixed mobile Ask AI floating trigger to prevent visual collisions with third-party chat widgets.
